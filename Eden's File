@@ -1,0 +1,7 @@
+% Clear the workspace and the screen
+sca;
+close all;
+clear;
+
+% Here we call some default settings for setting up Psychtoolbox
+PsychDefaultSetup(2);
