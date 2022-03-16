@@ -42,12 +42,12 @@ Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 70);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, [1 0 0], black);
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
 
 % Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 40);
+Screen('TextSize', window, 25);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, [0 0 1], black);
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
 
 % Flip to the screen
 Screen('Flip', window);
