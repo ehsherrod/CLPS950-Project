@@ -1,4 +1,4 @@
-% INTRODUCTORY SLIDE FOR TASK
+%  INTRODUCTORY SLIDE FOR TASK
 % Clear the workspace and the screen
 sca;
 close all;
@@ -66,14 +66,14 @@ KbStrokeWait;
 
 %INSTRUCTIONS SLIDE FOR TASK
 % Draw text in the upper portion of the screen in Times in black
-Screen('TextSize', window, 40);
+Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.25, black);
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
 % Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 20);
+Screen('TextSize', window, 15);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'For each trial, identify the shape that is unlike the others and click on it', 'center', screenYpixels*0.6, black);
+DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
 
 % Draw text in the lower portion of the screen in Times in black
 Screen('TextSize', window, 10);
