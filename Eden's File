@@ -62,9 +62,6 @@ KbStrokeWait;
 % Clear the screen
 sca;
 
-
-
-
 %INSTRUCTIONS SLIDE FOR TASK
 % Clear the workspace and the screen
 sca;
@@ -128,3 +125,4 @@ KbStrokeWait;
 
 % Clear the screen
 sca;
+
