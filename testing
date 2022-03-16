@@ -1,2 +1,11 @@
+folders_to_be_added = genpath(pwd);
+    addpath(folders_to_be_added );
 
+    % create the game display
+    s = [800 600];
+    bc = 'white'; % 'black';
+    bi = 'img/white.png'; % 'background_test.png'; % 
+    rcs = 1;
+    game_one = display_game(s, bc, bi, rcs);
+    h_game = show_game_board(game_one);
 code 
