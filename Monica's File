@@ -24,6 +24,13 @@ screenNumber = max(screens);
 % For help see: help BlackIndex
 black = BlackIndex(screenNumber);
 
+% Define black and white (white will be 1 and black 0). This is because
+% in general luminace values are defined between 0 and 1 with 255 steps in
+% between. With our setup, values defined between 0 and 1.
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+grey = white / 2;
+
 %CHANGE SCREENSIZE
 screensize = [0 0 600 400];
 
@@ -96,10 +103,38 @@ WaitSecs(2);
 % if the figures get more complex, we can increase the time the tester has
 % to view the image but keep the time they have to respond the same.
 
+
+% Define black and white (white will be 1 and black 0). This is because
+% in general luminace values are defined between 0 and 1 with 255 steps in
+% between. With our setup, values defined between 0 and 1.
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+grey = white / 2;
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, white);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'SCORE:', 'center', screenYpixels*0.6, white); %After figuring out how to collect responses diplay here.
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, white);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
 KbStrokeWait;
 
-% Clear the screen. "sca" is short hand for "Screen CloseAll". This clears
-% all features related to PTB. Note: we leave the variables in the
-% workspace so you can have a look at them if you want.
-% For help see: help sca
+% Clear the screen
 sca;
