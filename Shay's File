@@ -258,3 +258,21 @@ WaitSecs(2);
 sca;
 clear screen;
 
+
+
+
+% CODE FOR ANSWERING USING KEYBOARD INPUTS
+
+press = 0;
+while press==0
+  [z,b,c] = KbCheck;
+  if (find(c)==37)  %they chose left
+	  press = 1;
+  elseif (find(c)==39 %they chose right
+	  press = 2;
+  elseif (find(c)==27 %they chose esc to bail out
+	  press = 3;
+	  Screen(‘Closeall’)
+	  return
+  end
+end
