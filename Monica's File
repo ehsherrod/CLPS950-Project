@@ -1,5 +1,4 @@
-MODEL FOR FIGURING OUT KEY-PRESS TRACKING AND SCORE KEEPING
-Screen('Preference', 'SkipSyncTests', 1)
+Screen('Preference', 'SkipSyncTests', 1);
 % Clear the workspace and the screen
 sca;
 close all;
@@ -25,13 +24,16 @@ screenNumber = max(screens);
 % For help see: help BlackIndex
 black = BlackIndex(screenNumber);
 
+%CHANGE SCREENSIZE
+screensize = [0 0 600 400];
+
 % Open an on screen window and color it black
 % For help see: Screen OpenWindow?
-[window, windowRect] = PsychImaging('OpenWindow', screenNumber, black);
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, black, screensize);
 
 % Get the size of the on screen window in pixels
 % For help see: Screen WindowSize?
-screensize = [0 0 600 400];
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
 
 % Get the centre coordinate of the window in pixels
 % For help see: help RectCenter
@@ -58,48 +60,42 @@ centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 % define our RGB values. The maximum number for each is 1 and the minimum
 % 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
 % 1]. Play around with these numbers and see the result.
-rectColor = [1 0 0]; % display red square...
 
-WaitSecs(2); % for 2 seconds
-
-% Draw the square to the screen. For information on the command used in
-% this line see Screen FillRect?
-Screen('FillRect', window, rectColor, centeredRect);
-
-% Flip to the screen. This command basically draws all of our previous
-% commands onto the screen. See later demos in the animation section on more
-% timing details. And how to demos in this section on how to draw multiple
-% rects at once.
-% For help see: Screen Flip?
+rectColor = [1 0 0]; % Define red square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display red square...
 Screen('Flip', window);
+WaitSecs(3);
 
-% Now we have drawn to the screen we wait for a keyboard button press (any
-% key) to terminate the demo.
-% For help see: help KbStrokeWait
-%KbStrokeWait;
+rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+% where the task taker has x seconds (two in this case) to say whether
+% all the shapes were the same(right arrow) or not (left arrow))
+        %insert if statement here
+Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+
+rectColor = [1 1 0]; % Define yellow square... (this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display yellow square...
+Screen('Flip', window);
+WaitSecs(3);
 
 
-% Set the color of our square to full red. Color is defined by red green
-% and blue components (RGB). So we have three numbers which
-% define our RGB values. The maximum number for each is 1 and the minimum
-% 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
-% 1]. Play around with these numbers and see the result.
-rectColor = [1 1 0]; % Display yellow square...
+rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+% where the task taker has x seconds (two in this case) to say whether
+% all the shapes were the same(right arrow) or not (left arrow))
+        %insert if statement here
+Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
 
-WaitSecs(4); % for 2 seconds
-while rectColor == [1 1 0]; %while the rectangle is yellow...
-    acceptedKeys = [KbName('y'), KbName('n')];
-    if acceptedKeys == KbName('n')%correct answer
-        score = score +1;
-        break
-    else
-        score = score;
-        break
-    end
-end
-% Now we have drawn to the screen we wait for a keyboard button press (any
-% key) to terminate the demo.
-% For help see: help KbStrokeWait
+rectColor = [0 0 1]; % Define blue square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display blue square...
+Screen('Flip', window);
+WaitSecs(2);
+ 
+% if the figures get more complex, we can increase the time the tester has
+% to view the image but keep the time they have to respond the same.
+
 KbStrokeWait;
 
 % Clear the screen. "sca" is short hand for "Screen CloseAll". This clears
