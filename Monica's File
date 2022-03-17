@@ -19,11 +19,6 @@ screens = Screen('Screens');
 % For help see: help max
 screenNumber = max(screens);
 
-% Define black (white will be 1 and black 0). This is because
-% luminace values are (in general) defined between 0 and 1.
-% For help see: help BlackIndex
-black = BlackIndex(screenNumber);
-
 % Define black and white (white will be 1 and black 0). This is because
 % in general luminace values are defined between 0 and 1 with 255 steps in
 % between. With our setup, values defined between 0 and 1.
@@ -46,6 +41,11 @@ screensize = [0 0 600 400];
 % For help see: help RectCenter
 [xCenter, yCenter] = RectCenter(windowRect);
 
+
+% Get the size of the on screen window in pixels
+% For help see: Screen WindowSize?
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
 % Make a base Rect of 200 by 200 pixels. This is the rect which defines the
 % size of our square in pixels. Rects are rectangles, so the
 % sides do not have to be the same length. The coordinates define the top
@@ -61,55 +61,214 @@ baseRect = [0 0 200 200];
 % values.
 % For help see: CenterRectOnPointd
 centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
-
-% Set the color of our square to full red. Color is defined by red green
-% and blue components (RGB). So we have three numbers which
-% define our RGB values. The maximum number for each is 1 and the minimum
-% 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
-% 1]. Play around with these numbers and see the result.
-
-rectColor = [1 0 0]; % Define red square...(this will be replaced by the actual images)
-Screen('FillRect', window, rectColor, centeredRect);% Display red square...
-Screen('Flip', window);
-WaitSecs(3);
-
-rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
-% where the task taker has x seconds (two in this case) to say whether
-% all the shapes were the same(right arrow) or not (left arrow))
-        %insert if statement here
-Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+%% FIRST TRIAL 
+rectColor = [1 1 0]; % Define YELLOW square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display YELLOW square...
 Screen('Flip', window);
 WaitSecs(2);
 
-rectColor = [1 1 0]; % Define yellow square... (this will be replaced by the actual images)
-Screen('FillRect', window, rectColor, centeredRect);% Display yellow square...
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText (window, 'RESPONSE PAGE','center', screenYpixels*0.35, white);
+
+% Flip to the screen
 Screen('Flip', window);
-WaitSecs(3);
 
-
-rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
-% where the task taker has x seconds (two in this case) to say whether
-% all the shapes were the same(right arrow) or not (left arrow))
-        %insert if statement here
-Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+% improve portability of your code acorss operating systems 
+KbName('UnifyKeyNames');
+% specify key names of interest in the study
+activeKeys = [KbName('space')];
+% set value for maximum time to wait for response (in seconds)
+t2wait = 2; 
+% if the wait for presses is in a loop, 
+% then the following two commands should come before the loop starts
+% restrict the keys for keyboard input to the keys we want
+RestrictKeysForKbCheck(activeKeys);
+% suppress echo to the command line for keypresses
+ListenChar(2);
+% get the time stamp at the start of waiting for key input 
+% so we can evaluate timeout and reaction time
+% tStart can also be the timestamp for the onset of the stimuli, 
+% for example the VBLTimestamp returned by the 'Flip'
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+% initialise fields for rsp variable 
+% that would contain details about the response if given
+rsp.RT = NaN; 
+rsp.keyCode = [];
+rsp.keyName = [];
+score  = 0;
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if(keyIsDown) 
+          score = score+1;
+          break 
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rsp.RT      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+% if the wait for presses is in a loop, 
+% then the following two commands should come after the loop finishes
+% reset the keyboard input checking for all keys
+RestrictKeysForKbCheck;
+% re-enable echo to the command line for key presses
+% if code crashes before reaching this point 
+% CTRL-C will reenable keyboard input
+ListenChar(1)
+%Screen('FillRect', window, rectColor, centeredRect);% Display black square...
 Screen('Flip', window);
 WaitSecs(2);
 
+%% SECOND TRIAL
 rectColor = [0 0 1]; % Define blue square...(this will be replaced by the actual images)
 Screen('FillRect', window, rectColor, centeredRect);% Display blue square...
 Screen('Flip', window);
 WaitSecs(2);
- 
-% if the figures get more complex, we can increase the time the tester has
-% to view the image but keep the time they have to respond the same.
 
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText (window, 'RESPONSE PAGE','center', screenYpixels*0.35, white);
 
-% Define black and white (white will be 1 and black 0). This is because
-% in general luminace values are defined between 0 and 1 with 255 steps in
-% between. With our setup, values defined between 0 and 1.
-white = WhiteIndex(screenNumber);
-black = BlackIndex(screenNumber);
-grey = white / 2;
+% Flip to the screen
+Screen('Flip', window);
+
+% improve portability of your code acorss operating systems 
+KbName('UnifyKeyNames');
+% specify key names of interest in the study
+activeKeys = [KbName('space')];
+% set value for maximum time to wait for response (in seconds)
+t2wait = 2; 
+% if the wait for presses is in a loop, 
+% then the following two commands should come before the loop starts
+% restrict the keys for keyboard input to the keys we want
+RestrictKeysForKbCheck(activeKeys);
+% suppress echo to the command line for keypresses
+ListenChar(2);
+% get the time stamp at the start of waiting for key input 
+% so we can evaluate timeout and reaction time
+% tStart can also be the timestamp for the onset of the stimuli, 
+% for example the VBLTimestamp returned by the 'Flip'
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+% initialise fields for rsp variable 
+% that would contain details about the response if given
+rsp.RT = NaN;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if(keyIsDown) 
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rsp.RT      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+% if the wait for presses is in a loop, 
+% then the following two commands should come after the loop finishes
+% reset the keyboard input checking for all keys
+RestrictKeysForKbCheck;
+% re-enable echo to the command line for key presses
+% if code crashes before reaching this point 
+% CTRL-C will reenable keyboard input
+ListenChar(1)
+%Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+
+%% THIRD TRIAL (IN THIS TRIAL, PRESSING THE SPACE BAR IS THE INCORECT RESPONSE) (im not sure why the third response page wont show??)
+rectColor = [0 1 0]; % Define green square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display green square...
+Screen('Flip', window);
+WaitSecs(2);
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText (window, 'RESPONSE PAGE','center', screenYpixels*0.35, white);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% improve portability of your code acorss operating systems 
+KbName('UnifyKeyNames');
+% specify key names of interest in the study
+activeKeys = [KbName('space')];
+% set value for maximum time to wait for response (in seconds)
+t2wait = 2; 
+% if the wait for presses is in a loop, 
+% then the following two commands should come before the loop starts
+% restrict the keys for keyboard input to the keys we want
+RestrictKeysForKbCheck(activeKeys);
+% suppress echo to the command line for keypresses
+ListenChar(2);
+% get the time stamp at the start of waiting for key input 
+% so we can evaluate timeout and reaction time
+% tStart can also be the timestamp for the onset of the stimuli, 
+% for example the VBLTimestamp returned by the 'Flip'
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+% initialise fields for rsp variable 
+% that would contain details about the response if given
+rsp.RT = NaN; 
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if(keyIsDown) 
+          score;
+      else
+          score = score +1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait), timedout = true; end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rsp.RT      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+% if the wait for presses is in a loop, 
+% then the following two commands should come after the loop finishes
+% reset the keyboard input checking for all keys
+RestrictKeysForKbCheck;
+% re-enable echo to the command line for key presses
+% if code crashes before reaching this point 
+% CTRL-C will reenable keyboard input
+ListenChar(1)
+%Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+%%
 
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 20);
@@ -119,7 +278,7 @@ DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'ce
 % Draw text in the middle of the screen in Times in black
 Screen('TextSize', window, 15);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'SCORE:', 'center', screenYpixels*0.6, white); %After figuring out how to collect responses diplay here.
+DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, white); %After figuring out how to collect responses diplay here.
 
 % Draw text in the lower portion of the screen in Times in black
 Screen('TextSize', window, 10);
