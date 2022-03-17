@@ -37,7 +37,7 @@ baseRect = [0 0 200 200];
 maxDiameter = max(baseRect) * 1.01;
 
 % Center the rectangle on the centre of the screen
-centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
+draw_oval = CenterRectOnPointd(baseRect, xCenter, yCenter);
 
 % Set the color of the rect to black
 rectColor = black;
@@ -46,7 +46,7 @@ rectColor = black;
 penWidth = 6;
 
 % Draw the rect to the screen
-Screen('FrameOval', window, rectColor, centeredRect, penWidth);
+Screen('FrameOval', window, rectColor, draw_oval, penWidth);
 
 % Flip to the screen
 Screen('Flip', window);
@@ -56,7 +56,6 @@ KbStrokeWait;
 
 % Clear the screen 
 sca;
-
 
 
 
