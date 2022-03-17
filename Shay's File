@@ -1,3 +1,199 @@
+
+% COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE
+
+%Screen('Preference', 'SkipSyncTests', 1);  
+
+%  INTRODUCTORY SLIDE FOR TASK
+% Clear the workspace and the screen
+sca;
+close all;
+clear;
+
+% Here we call some default settings for setting up Psychtoolbox
+PsychDefaultSetup(2);
+
+% Get the screen numbers. This gives us a number for each of the screens
+% attached to our computer.
+% For help see: Screen Screens?
+screens = Screen('Screens');
+
+% Draw we select the maximum of these numbers. So in a situation where we
+% have two screens attached to our monitor we will draw to the external
+% screen. When only one screen is attached to the monitor we will draw to
+% this.
+% For help see: help max
+screenNumber = max(screens);
+
+
+% Define black and white (white will be 1 and black 0). This is because
+% in general luminace values are defined between 0 and 1 with 255 steps in
+% between. With our setup, values defined between 0 and 1.
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+grey = white / 2;
+
+%CHANGE SCREENSIZE
+screensize = [0 0 600 400];
+
+% Open an on screen window and color it black
+% For help see: Screen OpenWindow?
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Set the blend function for the screen
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
+% Get the size of the on screen window in pixels
+% For help see: Screen WindowSize?
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Get the centre coordinate of the window in pixels
+% For help see: help RectCenter
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 70);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 25);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+%INSTRUCTIONS SLIDE FOR TASK
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Make a base Rect of 200 by 200 pixels. This is the rect which defines the
+% size of our square in pixels. Rects are rectangles, so the
+% sides do not have to be the same length. The coordinates define the top
+% left and bottom right coordinates of our rect [top-left-x top-left-y
+% bottom-right-x bottom-right-y]. The easiest thing to do is set the first
+% two coordinates to 0, then the last two numbers define the length of the
+% rect in X and Y. The next line of code then centers the rect on a
+% particular location of the screen.
+%baseRect will be our indivudal images/figure
+baseRect = [0 0 200 200];
+
+% Center the rectangle on the centre of the screen using fractional pixel
+% values.
+% For help see: CenterRectOnPointd
+centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
+
+% Set the color of our square to full red. Color is defined by red green
+% and blue components (RGB). So we have three numbers which
+% define our RGB values. The maximum number for each is 1 and the minimum
+% 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
+% 1]. Play around with these numbers and see the result.
+
+rectColor = [1 0 0]; % Define red square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display red square...
+Screen('Flip', window);
+WaitSecs(3);
+
+rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+% where the task taker has x seconds (two in this case) to say whether
+% all the shapes were the same(right arrow) or not (left arrow))
+        %insert if statement here
+Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+
+rectColor = [1 1 0]; % Define yellow square... (this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display yellow square...
+Screen('Flip', window);
+WaitSecs(3);
+
+
+rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+% where the task taker has x seconds (two in this case) to say whether
+% all the shapes were the same(right arrow) or not (left arrow))
+        %insert if statement here
+Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+
+rectColor = [0 0 1]; % Define blue square...(this will be replaced by the actual images)
+Screen('FillRect', window, rectColor, centeredRect);% Display blue square...
+Screen('Flip', window);
+WaitSecs(2);
+ 
+% if the figures get more complex, we can increase the time the tester has
+% to view the image but keep the time they have to respond the same.
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'SCORE:', 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Clear the screen
+sca;
+
+
+
+
+
+
+
+% IMAGE DISPLAY CODE
+
 % Clear the workspace and the screen, set up PTB (general intro)
 sca;
 close all;
