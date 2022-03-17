@@ -1,3 +1,30 @@
+% drawing image
+v = [-10 0; 0 0; 10 0]; % this is three locations at (-10,0), (0,0), and (10,0)
+location = randi(size(v, 1));
+for i = 1:size(v,1)
+    if location == i
+        draw_triangle(v(i,:)); %pseudocode, just put in the function for what to draw
+    else
+        draw_circle(v(i,:));
+    end
+end
+
+% keeping score
+ntrials = 5;
+noddball = 3;
+trial_types = zeros(ntrials, 1);
+trial_types(1:noddball)=1;
+shuffle(trial_types);
+--- % within this
+this_trial = trial_types(ix);
+if kbcheck & [this_trial==1]
+    score = score + 1;
+elseif kbcheck & [this_trial == 0]
+
+
+
+
+
 % Clear the workspace and the screen
 sca;
 close all;
