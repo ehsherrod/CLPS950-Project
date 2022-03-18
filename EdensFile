@@ -1,4 +1,80 @@
-% PRELIMINARY CODE FOR FIGURES USED IN TRIAL
+% CODE TO CREATE MATRIX OF GRID OF DISTRACTORS(CIRCLES)
+% CODED ON 3/18
+% Clear the workspace and the screen
+sca;
+close all;
+clear;
+
+% Here we call some default settings for setting up Psychtoolbox
+PsychDefaultSetup(2);
+
+% Get the screen numbers
+screens = Screen('Screens');
+
+% Draw to the external screen if avaliable
+screenNumber = max(screens);
+
+% Define black and white
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+
+% haley addition
+screensize = [0 0 600 600];
+
+% Open an on screen window
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Get the size of the on screen window
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Get the centre coordinate of the window
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% Make a base Rect of 200 by 250 pixels
+baseRect = [0 0 40 40];
+
+% For Ovals we set a maximum diameter up to which it is perfect for
+maxDiameter = max(baseRect) * 0.6;
+
+% Center the rectangle on the centre of the screen
+%draw_circle = CenterRectOnPointd(baseRect, DistractorX_loc(x), DistractorY_loc(y));
+
+% Set the color of the rect to black
+rectColor = black;
+
+% Set the width of border
+penWidth = 3;
+
+DistractorX_loc = linspace(100, 500, 20);
+DistractorY_loc = linspace(100, 500, 20);
+%[DistractorX_loc, DistractorY_loc]= Distractor_mat;
+
+
+for x = 1:2:length(DistractorX_loc)
+    for y = 1:2:length(DistractorY_loc)
+        draw_circle = CenterRectOnPointd(baseRect, DistractorX_loc(x), DistractorY_loc(y));
+        % Draw the rect to the screen
+        Screen('FrameOval', window, rectColor, draw_circle, penWidth);
+    end
+end
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Wait for a key press
+KbStrokeWait;
+
+% Clear the screen 
+sca; 
+
+
+
+
+
+
+
+
+% CODE FOR FIGURES USED IN TRIAL
 
 % PENTAGON CODE
 % CODED ON 3/18
