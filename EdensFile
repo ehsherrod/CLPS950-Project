@@ -1,5 +1,5 @@
 % PRELIMINARY CODE FOR FIGURES USED IN TRIAL
-
+% CODED ON 3/17
 % CIRCLE CODE
 % CREATES A SINGLE FRAMED CIRCLE
 % Clear the workspace and the screen
@@ -63,6 +63,7 @@ sca;
 
 % SQUARE CODE
 % CODES FOR A SINGLE FRAMED SQUARE
+% CODED ON 3/17
 % Clear the workspace and the screen
 sca;
 close all;
@@ -118,6 +119,7 @@ sca;
 
 
 % OCTAGON CODE
+% CODED ON 3/17
 % Clear the workspace and the screen
 sca;
 close all;
@@ -188,6 +190,7 @@ sca;
 
 
 %  INTRODUCTORY SLIDE FOR TASK
+% CODED ON 3/16
 % Clear the workspace and the screen
 sca;
 close all;
@@ -254,6 +257,7 @@ ifi = Screen('GetFlipInterval', window);
 KbStrokeWait;
 
 %INSTRUCTIONS SLIDE FOR TASK
+% CODED ON 3/16
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
