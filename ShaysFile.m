@@ -1,5 +1,4 @@
 % Code for multiple circles screen!
-
 % prep workspace and screen
 sca;
 close all;
