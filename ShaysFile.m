@@ -1,3 +1,83 @@
+% CODE FOR GRID AND ONE ODD SHAPE!
+% Created 3/21
+
+% Clear the workspace and the screen
+sca;
+close all;
+clear;
+
+% Here we call some default settings for setting up Psychtoolbox
+PsychDefaultSetup(2);
+
+% Get the screen numbers
+screens = Screen('Screens');
+
+% Draw to the external screen if avaliable
+screenNumber = max(screens);
+
+% Define black and white
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+
+% haley addition
+screensize = [0 0 600 600];
+
+% Open an on screen window
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Get the size of the on screen window
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Get the centre coordinate of the window
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40];
+
+% Set the color of the circle to black, this is just a border, not fill
+circlecolor = black;
+
+% Set the width of border
+penWidth = 3;
+
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+Distractor_mat = [DistractorX_loc, DistractorY_loc];
+
+% Loops through the positions for each shape, drawing 10x10 grid of circles
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc) 
+        if (x == 8) & (y==2)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20;
+            yPosVector = -cos(anglesRad) .* radius + 145;
+            xPosVector = -sin(anglesRad) .* radius + 412;
+            rectColor = black;
+            lineWidth = 3;
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Wait for a key press
+KbStrokeWait;
+
+% Clear the screen 
+sca; 
+
+%% 
+
+
+
 % MULTIPLE CIRCLES
 
 % prep workspace and screen
@@ -68,7 +148,7 @@ noddball = 3;
 trial_types = zeros(ntrials, 1);
 trial_types(1:noddball)=1;
 shuffle(trial_types);
---- % within this
+% within this
 this_trial = trial_types(ix);
 if kbcheck & [this_trial==1]
     score = score + 1;
@@ -313,8 +393,6 @@ ifi = Screen('GetFlipInterval', window);
 % key) to terminate the demo
 KbStrokeWait;
 
-%% 
-
 %INSTRUCTIONS SLIDE FOR TASK
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 30);
@@ -509,7 +587,7 @@ while press==0
   [z,b,c] = KbCheck;
   if (find(c)==37)  %they chose left
 	  press = 1;
-  elseif (find(c)==39 %they chose right
+  elseif (find(c)==39) %they chose right
 	  press = 2;
   elseif (find(c)==27 %they chose esc to bail out
 	  press = 3;
@@ -517,3 +595,37 @@ while press==0
 	  return
   end
 end
+
+%% 
+
+numSides = 1;
+
+% Angles at which our polygon vertices endpoints will be. We start at zero
+% and then equally space vertex endpoints around the edge of a circle. The
+% polygon is then defined by sequentially joining these end points.
+anglesDeg = linspace(0, 360, numSides + 1);
+anglesRad = anglesDeg * (pi / 180);
+radius = 200;
+
+% X and Y coordinates of the points defining out polygon, centred on the
+% centre of the screen
+yPosVector = -cos(anglesRad) .* radius + yCenter;
+xPosVector = -sin(anglesRad) .* radius + xCenter;
+
+% Set the color of the rect to red
+rectColor = black;
+
+% Width of the lines for our frame
+lineWidth = 6;
+
+% Draw the rect to the screen
+Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Wait for a key press
+KbStrokeWait;
+
+% Clear the screen
+sca;

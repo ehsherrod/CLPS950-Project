@@ -31,12 +31,6 @@ screensize = [0 0 600 600];
 % Make a base square of 40 by 40 pixels which your circle fits inside
 baseSquare = [0 0 40 40];
 
-% Unecessary code from demo:
-% For Ovals we set a maximum diameter up to which it is perfect for
-% maxDiameter = max(baseSquare) * 1.01;
-% Center the rectangle on the centre of the screen
-% draw_circle = CenterRectOnPointd(baseRect, DistractorX_loc(x), DistractorY_loc(y));
-
 % Set the color of the circle to black, this is just a border, not fill
 circlecolor = black;
 
@@ -50,10 +44,21 @@ Distractor_mat = [DistractorX_loc, DistractorY_loc];
 
 % Loops through the positions for each shape, drawing 10x10 grid of circles
 for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc)
-        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-        % Draw the rect to the screen
-        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    for y = 1:length(DistractorY_loc) 
+        if (x == 8) & (y==2)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20;
+            yPosVector = -cos(anglesRad) .* radius + 145;
+            xPosVector = -sin(anglesRad) .* radius + 412;
+            rectColor = black;
+            lineWidth = 3;
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
     end
 end
 
@@ -65,4 +70,3 @@ KbStrokeWait;
 
 % Clear the screen 
 sca; 
-
