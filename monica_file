@@ -1,3 +1,328 @@
+% COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE +TIMING/SCORE KEEPING/BUTTON CLICK TRACKING.
+% Created 3/21
+
+%  INTRODUCTORY SLIDE FOR TASK
+% General set-up for screen/PTB
+sca;
+close all;
+clear;
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+% Defining colors
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+
+% Screensize
+screensize = [0 0 600 600];
+
+% Open an on screen window and color it white
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Set the blend function for the screen
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
+% Windowsize
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Finding center of screen
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% TITLE PAGE: "Visual Search Task"
+Screen('TextSize', window, 70);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
+
+% Subtitles
+Screen('TextSize', window, 25);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Pressing any key to end
+KbStrokeWait;
+
+%INSTRUCTIONS SLIDE FOR TASK
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+%ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40];
+
+circlecolor = black; % border color
+penWidth = 3; % border width
+
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+%Distractor_mat = [DistractorX_loc, DistractorY_loc];
+
+% Loops through the positions for each shape, drawing 10x10 grid of circles
+
+% Given screen = 600 x 600 pixels, COORDINATES =
+% Pentagon Location: (8, 2) = Pixel Location: (412, 145)
+% Pentagon Location: (3, 7) = Pixel Location: (190, 368)
+% Pentagon Location: (6, 9) = Pixel Location: (190, 368)
+
+% If we make the locations into variables to loop through...
+%pent_coordX = [8, 3];
+%pent_coordY = [2, 7];
+%pent_pixelX = [412, 190];
+%pent_pixelY = [145, 368];
+
+% TRIAL 1 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)  
+        if (x == 6) && (y == 9)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20; 
+            xPosVector = -sin(anglesRad) .* radius + 322;
+            yPosVector = -cos(anglesRad) .* radius + 457;
+            rectColor = black; 
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+%WaitSecs(2);
+
+%TIMING ASPECT + SCORE KEEPING
+
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; %accepted keys
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
+ListenChar(2); % suppress echo to the command line for keypresses
+tStart = GetSecs; % repeat until a valid key is pressed or we time out
+timedout = false;
+rspRT_1 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+score  = 0;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
+      if(keyIsDown) %if key is pressed
+          score = score+1; %score goes up by one
+          break 
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_1      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_1
+RestrictKeysForKbCheck;
+ListenChar(1);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 2 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc) 
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+%WaitSecs(2);
+
+% TIMING ASPECT + SCORE KEEPING
+
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_2 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if ~(keyIsDown) %if key not pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_2      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_2 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
+
+% TRIAL 3 PENTAGON
+
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)  
+        if (x == 8) && (y == 2)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20; 
+            xPosVector = -sin(anglesRad) .* radius + 412;
+            yPosVector = -cos(anglesRad) .* radius + 145;
+            rectColor = black; 
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+%WaitSecs(2);
+
+%TIMING AND STUFF
+
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+
+rspRT = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if      (keyIsDown) 
+          score = score +1;
+         break
+      end
+      if( (keyTime - tStart) > t2wait), timedout = true; end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_3     = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+
+ListenChar(1) 
+WaitSecs(2);
+
+rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
+rspRT_5 = round(rspRT_4,3);      
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, sprintf('Your average response time: %d\n', rspRT_5), 'center', screenYpixels*0.8, black); %After figuring out how to collect responses diplay here.
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Clear the screen
+sca;
+
+%%%%%%%%%%%%%%%%%%%
+
 Screen('Preference', 'SkipSyncTests', 1);
 % Clear the workspace and the screen
 sca;
@@ -297,3 +622,178 @@ KbStrokeWait;
 
 % Clear the screen
 sca;
+
+%% FROM EDEN'S FILE
+
+% CODE TO CREATE MATRIX OF DISTRACTORS(CIRCLES) GRID WITH THE TIMED AND
+% SCORE KEEPING ELEMENT
+% CODED ON 3/21
+% Clear the workspace and the screen
+sca;
+close all;
+clear;
+
+% Here we call some default settings for setting up Psychtoolbox
+PsychDefaultSetup(2);
+
+% Get the screen numbers
+screens = Screen('Screens');
+
+% Draw to the external screen if avaliable
+screenNumber = max(screens);
+
+% Define black and white
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+
+% haley addition
+screensize = [0 0 600 600];
+
+% Open an on screen window
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Get the size of the on screen window
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Get the centre coordinate of the window
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40];
+
+% Unecessary code from demo:
+% For Ovals we set a maximum diameter up to which it is perfect for
+% maxDiameter = max(baseSquare) * 1.01;
+% Center the rectangle on the centre of the screen
+% draw_circle = CenterRectOnPointd(baseRect, DistractorX_loc(x), DistractorY_loc(y));
+
+% Set the color of the circle to black, this is just a border, not fill
+circlecolor = black;
+
+% Set the width of border
+penWidth = 3;
+
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+Distractor_mat = [DistractorX_loc, DistractorY_loc];
+
+% Loops through the positions for each shape, drawing 10x10 grid of circles
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        % Draw the rect to the screen
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    end
+end
+
+% Flip to the screen
+Screen('Flip', window);
+WaitSecs(2);
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText (window, 'RESPONSE PAGE','center', screenYpixels*0.35, black); %When this page comes up, make response
+
+% Flip to the screen
+Screen('Flip', window);
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; %accepted keys
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+
+% if the wait for presses is in a loop, 
+% then the following two commands should come before the loop starts
+
+RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
+ListenChar(2); % suppress echo to the command line for keypresses
+
+% get the time stamp at the start of waiting for key input 
+% so we can evaluate timeout and reaction time
+% tStart can also be the timestamp for the onset of the stimuli, 
+% for example the VBLTimestamp returned by the 'Flip'
+
+tStart = GetSecs; % repeat until a valid key is pressed or we time out
+timedout = false;
+% initialise fields for response variable 
+% that would contain details about the response if given
+rspRT_1 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+score  = 0;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;     % check if a key is pressed, only keys specified in activeKeys are considered valid
+      if(keyIsDown) %if key is pressed
+          score = score+1; %score goes up by one
+          break 
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_1      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_1
+% if the wait for presses is in a loop, 
+% then the following two commands should come after the loop finishes
+% reset the keyboard input checking for all keys
+RestrictKeysForKbCheck;
+% re-enable echo to the command line for key presses
+% if code crashes before reaching this point 
+% CTRL-C will reenable keyboard input
+ListenChar(1)
+%Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('Flip', window);
+WaitSecs(2);
+
+%21/3
+% MAKING TIMING SEQUENCE MORE EFFICIENT BY USING A FOR LOOP AS OPPOSED TO HARD CODING EACH TIME
+vect1 = zeros(5,5)
+vect2 = ones(5,5)
+vect3 = zeros(5,5) 
+v = [-10 0 10; 0 0 0]
+ntrials = 5; % number of total trials
+noddball = 3; % number of times a response will be reqiure (press the space bar)
+trial_types = zeros(ntrials,1); 
+trial_types(1:noddball) = 1;
+Shuffle(trial_types);
+
+for ix = 1:ntrial
+    loc = randi(size(v,1))
+    for i = 1:size(v,1)
+        if loc == i & this_trial == 1 % first trial
+            draw_triangle(v(i,:)) % not all circles
+        else
+            draw_circle(v(i,:)) % all circles
+        end
+    end
+
+if loc == i & this_trial == 1
+    trial_types = 0; %circles
+else
+    trial_types = 1; %circles
+end
+    while ~timedout
+            [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+            if ~(keyIsDown) & this trial_types == 1
+                score = score +1;
+            elseif ~(keyIsDown) & trial_types == 0
+                score;
+                break
+            end
+        if( (keyTime - tStart) > t2wait), timedout = true; 
+            end
+        end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_3     = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
