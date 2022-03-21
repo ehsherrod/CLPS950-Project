@@ -1,4 +1,5 @@
-% Code for multiple circles screen!
+% MULTIPLE CIRCLES
+
 % prep workspace and screen
 sca;
 close all;
@@ -46,8 +47,9 @@ KbStrokeWait;
 % Clear the screen
 sca;
 
+%% 
 
-
+% CODE FROM PTB TUTORIAL
 
 % drawing image
 v = [-10 0; 0 0; 10 0]; % this is three locations at (-10,0), (0,0), and (10,0)
@@ -72,6 +74,7 @@ if kbcheck & [this_trial==1]
     score = score + 1;
 elseif kbcheck & [this_trial == 0]
 
+%% 
 
 
 
@@ -138,6 +141,7 @@ KbStrokeWait;
 sca;
 
 
+%% 
 
 
 
@@ -229,12 +233,9 @@ Screen('Flip', window);
 % key) to terminate the demo. For help see: help KbStrokeWait
 KbStrokeWait;
 
-% Clear the screen. "sca" is short hand for "Screen CloseAll". This clears
-% all features related to PTB. Note: we leave the variables in the
-% workspace so you can have a look at them if you want.
-% For help see: help sca
 sca;
 
+%% 
 
 
 % COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE
@@ -262,7 +263,6 @@ screens = Screen('Screens');
 % For help see: help max
 screenNumber = max(screens);
 
-
 % Define black and white (white will be 1 and black 0). This is because
 % in general luminace values are defined between 0 and 1 with 255 steps in
 % between. With our setup, values defined between 0 and 1.
@@ -270,7 +270,7 @@ white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
 grey = white / 2;
 
-%CHANGE SCREENSIZE
+%Chang Screensize
 screensize = [0 0 600 400];
 
 % Open an on screen window and color it black
@@ -312,6 +312,8 @@ ifi = Screen('GetFlipInterval', window);
 % Now we have drawn to the screen we wait for a keyboard button press (any
 % key) to terminate the demo
 KbStrokeWait;
+
+%% 
 
 %INSTRUCTIONS SLIDE FOR TASK
 % Draw text in the upper portion of the screen in Times in black
@@ -379,7 +381,6 @@ Screen('FillRect', window, rectColor, centeredRect);% Display yellow square...
 Screen('Flip', window);
 WaitSecs(3);
 
-
 rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
 % where the task taker has x seconds (two in this case) to say whether
 % all the shapes were the same(right arrow) or not (left arrow))
@@ -427,6 +428,7 @@ sca;
 
 
 
+%% 
 
 
 
@@ -496,6 +498,7 @@ WaitSecs(2);
 sca;
 clear screen;
 
+%% 
 
 
 
