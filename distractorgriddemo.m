@@ -3,7 +3,6 @@ sca;
 close all;
 clear;
 
-% Here we call some default settings for setting up Psychtoolbox
 PsychDefaultSetup(2);
 
 % Get the screen numbers
@@ -31,11 +30,8 @@ screensize = [0 0 600 600];
 % Make a base square of 40 by 40 pixels which your circle fits inside
 baseSquare = [0 0 40 40];
 
-% Set the color of the circle to black, this is just a border, not fill
-circlecolor = black;
-
-% Set the width of border
-penWidth = 3;
+circlecolor = black; % border color
+penWidth = 3; % border width
 
 % Define dimensions of grid using pixel coordinates, and # of shapes
 DistractorX_loc = linspace(100, 500, 10);
@@ -43,16 +39,27 @@ DistractorY_loc = linspace(100, 500, 10);
 Distractor_mat = [DistractorX_loc, DistractorY_loc];
 
 % Loops through the positions for each shape, drawing 10x10 grid of circles
+% Given screen = 600 x 600 pixels,
+% Pentagon Location: (8, 2) = Pixel Location: (412, 145)
+% Pentagon Location: (3, 7) = Pixel Location: (190, 368)
+% Pentagon Location: (6, 9) = Pixel Location: (190, 368)
+
+% If we make variables to loop through...
+%pent_coordX = [8, 3];
+%pent_coordY = [2, 7];
+%pent_pixelX = [412, 190];
+%pent_pixelY = [145, 368];
+
 for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc) 
-        if (x == 8) & (y==2)
+    for y = 1:length(DistractorY_loc)  
+        if (x == 6) && (y == 9)
             numSides = 5;
             anglesDeg = linspace(0, 360, numSides + 1);
             anglesRad = anglesDeg * (pi / 180);
-            radius = 20;
-            yPosVector = -cos(anglesRad) .* radius + 145;
-            xPosVector = -sin(anglesRad) .* radius + 412;
-            rectColor = black;
+            radius = 20; 
+            xPosVector = -sin(anglesRad) .* radius + 322;
+            yPosVector = -cos(anglesRad) .* radius + 457;
+            rectColor = black; 
             lineWidth = 3;
             Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
         else 
