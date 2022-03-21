@@ -228,7 +228,7 @@ white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
 
 % haley addition
-screensize = [0 0 600 400];
+screensize = [0 0 600 600];
 
 % Open an on screen window
 [window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
@@ -240,7 +240,7 @@ screensize = [0 0 600 400];
 [xCenter, yCenter] = RectCenter(windowRect);
 
 % Make a base Rect of 200 by 200 pixels
-baseRect = [0 0 200 200];
+baseRect = [0 0 40 40];
 
 drawsquare = CenterRectOnPointd(baseRect, xCenter, yCenter);
 
@@ -248,7 +248,7 @@ drawsquare = CenterRectOnPointd(baseRect, xCenter, yCenter);
 squarecolor = black;
 
 % Pen width for the frames
-penWidthPixels = 6; 
+penWidthPixels = 3; 
 
 % Draw the rect to the screen
 Screen('FrameRect', window, squarecolor, drawsquare, penWidthPixels);

@@ -53,15 +53,14 @@ Distractor_mat = [DistractorX_loc, DistractorY_loc];
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)  
         if (x == 6) && (y == 9)
-            numSides = 5;
+            numSides = 4;
             anglesDeg = linspace(0, 360, numSides + 1);
             anglesRad = anglesDeg * (pi / 180);
             radius = 20; 
             xPosVector = -sin(anglesRad) .* radius + 322;
             yPosVector = -cos(anglesRad) .* radius + 457;
             rectColor = black; 
-            lineWidth = 3;
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -75,5 +74,6 @@ Screen('Flip', window);
 % Wait for a key press
 KbStrokeWait;
 
-% Clear the screen 
+% Clear the screen
 sca; 
+

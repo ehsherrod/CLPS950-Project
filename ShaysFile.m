@@ -1,3 +1,213 @@
+% COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE
+% Created 3/21
+
+%  INTRODUCTORY SLIDE FOR TASK
+% General set-up for screen/PTB
+sca;
+close all;
+clear;
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+% Defining colors
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+grey = white / 2;
+
+% Screensize
+screensize = [0 0 600 600];
+
+% Open an on screen window and color it white
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Set the blend function for the screen
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
+% Windowsize
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Finding center of screen
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% TITLE PAGE: "Visual Search Task"
+Screen('TextSize', window, 70);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
+
+% Subtitles
+Screen('TextSize', window, 25);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Pressing any key to end
+KbStrokeWait;
+
+%INSTRUCTIONS SLIDE FOR TASK
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40];
+
+circlecolor = black; % border color
+penWidth = 3; % border width
+
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+Distractor_mat = [DistractorX_loc, DistractorY_loc];
+
+% Loops through the positions for each shape, drawing 10x10 grid of circles
+
+% Given screen = 600 x 600 pixels, COORDINATES =
+% Pentagon Location: (8, 2) = Pixel Location: (412, 145)
+% Pentagon Location: (3, 7) = Pixel Location: (190, 368)
+% Pentagon Location: (6, 9) = Pixel Location: (190, 368)
+
+% If we make the locations into variables to loop through...
+%pent_coordX = [8, 3];
+%pent_coordY = [2, 7];
+%pent_pixelX = [412, 190];
+%pent_pixelY = [145, 368];
+
+% TRIAL 1 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)  
+        if (x == 6) && (y == 9)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20; 
+            xPosVector = -sin(anglesRad) .* radius + 322;
+            yPosVector = -cos(anglesRad) .* radius + 457;
+            rectColor = black; 
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 2 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc) 
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 3 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)  
+        if (x == 8) && (y == 2)
+            numSides = 5;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20; 
+            xPosVector = -sin(anglesRad) .* radius + 412;
+            yPosVector = -cos(anglesRad) .* radius + 145;
+            rectColor = black; 
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'SCORE:', 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Clear the screen
+sca;
+
+
+%% 
+
+
 % CODE FOR GRID AND ONE ODD SHAPE!
 % Created 3/21
 
@@ -153,6 +363,7 @@ this_trial = trial_types(ix);
 if kbcheck & [this_trial==1]
     score = score + 1;
 elseif kbcheck & [this_trial == 0]
+end
 
 %% 
 
@@ -589,9 +800,9 @@ while press==0
 	  press = 1;
   elseif (find(c)==39) %they chose right
 	  press = 2;
-  elseif (find(c)==27 %they chose esc to bail out
+  elseif (find(c)==27) %they chose esc to bail out
 	  press = 3;
-	  Screen(‘Closeall’)
+	  Screen('Closeall')
 	  return
   end
 end
