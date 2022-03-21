@@ -13,7 +13,6 @@ screenNumber = max(screens);
 % Defining colors
 white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
-grey = white / 2;
 
 % Screensize
 screensize = [0 0 600 600];
@@ -73,7 +72,7 @@ DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0
 Screen('Flip', window);
 
 % Query the frame duration
-ifi = Screen('GetFlipInterval', window);
+%ifi = Screen('GetFlipInterval', window);
 
 % Now we have drawn to the screen we wait for a keyboard button press (any
 % key) to terminate the demo
@@ -88,7 +87,7 @@ penWidth = 3; % border width
 % Define dimensions of grid using pixel coordinates, and # of shapes
 DistractorX_loc = linspace(100, 500, 10);
 DistractorY_loc = linspace(100, 500, 10);
-Distractor_mat = [DistractorX_loc, DistractorY_loc];
+%Distractor_mat = [DistractorX_loc, DistractorY_loc];
 
 % Loops through the positions for each shape, drawing 10x10 grid of circles
 
@@ -258,7 +257,7 @@ Distractor_mat = [DistractorX_loc, DistractorY_loc];
 % Loops through the positions for each shape, drawing 10x10 grid of circles
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc) 
-        if (x == 8) & (y==2)
+        if (x == 8) && (y==2)
             numSides = 5;
             anglesDeg = linspace(0, 360, numSides + 1);
             anglesRad = anglesDeg * (pi / 180);
@@ -285,8 +284,6 @@ KbStrokeWait;
 sca; 
 
 %% 
-
-
 
 % MULTIPLE CIRCLES
 
