@@ -80,8 +80,10 @@ KbStrokeWait;
 
 % Make a base square of 40 by 40 pixels which your circle fits inside
 baseSquare = [0 0 40 40];
+baseSquare2 = [0 0 35 35];
 
 circlecolor = black; % border color
+squarecolor = black;
 penWidth = 3; % border width
 
 % Define dimensions of grid using pixel coordinates, and # of shapes
@@ -163,6 +165,68 @@ for x = 1:length(DistractorX_loc)
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
         end
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 1 FOR SQUARE SHAPE (yes target)
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 3) && (y==2)
+            drawsquare = CenterRectOnPointd(baseSquare2, 189, 145);
+            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 2 FOR SQUARE SHAPE (yes target)
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 9) && (y==7)
+            drawsquare = CenterRectOnPointd(baseSquare2, 456, 367);
+            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 3 FOR SQUARE SHAPE (no target)
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        % Draw the rect to the screen
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
     end
 end
 Screen('Flip', window);
