@@ -1,66 +1,40 @@
-% COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE
+% COMBINED INTRO/INSTRUCTIONS/IMAGES/TIMING/SCORES
 % Updated 3/22
 
-%  INTRODUCTORY SLIDE FOR TASK
-% General set-up for screen/PTB
+% GENERAL SET-UP FOR PTB/SCREEN
 sca;
 close all;
 clear;
 PsychDefaultSetup(2);
 screens = Screen('Screens');
 screenNumber = max(screens);
-
-% Defining colors
-white = WhiteIndex(screenNumber);
-black = BlackIndex(screenNumber);
- 
-% Screensize
-screensize = [0 0 600 600];
-
+white = WhiteIndex(screenNumber); black = BlackIndex(screenNumber); % Defining colors
+screensize = [0 0 600 600]; % Screensize
 % Open an on screen window and color it white
 [window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
-
 % Set the blend function for the screen
 Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
-
-% Windowsize
-[screenXpixels, screenYpixels] = Screen('WindowSize', window);
-
-% Finding center of screen
-[xCenter, yCenter] = RectCenter(windowRect);
+[screenXpixels, screenYpixels] = Screen('WindowSize', window); % Windowsize
+[xCenter, yCenter] = RectCenter(windowRect); % Finding center of screen
 
 % TITLE PAGE: "Visual Search Task"
-Screen('TextSize', window, 60);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 60); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
-
 % Subtitles
-Screen('TextSize', window, 25);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 25); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
-
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
-% Flip to the screen
 Screen('Flip', window);
-
-% Query the frame duration
 %ifi = Screen('GetFlipInterval', window);
-
-% Pressing any key to end
-KbStrokeWait;
+KbStrokeWait; % Pressing any key to end
 
 %INSTRUCTIONS SLIDE FOR TASK
-% Draw text in the upper portion of the screen in Times in black
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
-% Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
     'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
     'Record your answer when prompted by the response page by pressing the\n\n', ...
@@ -68,26 +42,17 @@ Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ..
     'Press nothing otherwise.'];  
 DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
 
-% Draw text in the lower portion of the screen in Times in black
-Screen('TextSize', window, 10);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
-% Flip to the screen
 Screen('Flip', window);
-
 %ifi = Screen('GetFlipInterval', window);
-
 KbStrokeWait;
 
 % Make a base square of 40 by 40 pixels which your circle fits inside
-baseSquare = [0 0 40 40];
-baseSquare2 = [0 0 35 35];
-
-circlecolor = black; % border color
-squarecolor = black;
+baseSquare = [0 0 40 40]; baseSquare2 = [0 0 35 35];
+circlecolor = black; squarecolor = black; % border color
 penWidth = 3; % border width
-
 % Define dimensions of grid using pixel coordinates, and # of shapes
 DistractorX_loc = linspace(100, 500, 10);
 DistractorY_loc = linspace(100, 500, 10);
@@ -109,11 +74,9 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
 
@@ -130,7 +93,7 @@ rsp.keyCode = [];
 rsp.keyName = [];
 score  = 0;
 while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
       if(keyIsDown) %if key is pressed - oddball present
           score = score+1; %score goes up by one
           break 
@@ -138,9 +101,8 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
+end
+  if(~timedout) % store code for key pressed and reaction time
       rspRT_1      = keyTime - tStart;
       rsp.keyCode = keyCode;
       rsp.keyName = KbName(rsp.keyCode);
@@ -167,14 +129,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -188,8 +147,6 @@ rspRT_2 = 0;
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
       if (keyIsDown) %if key is pressed
           score = score+1;
@@ -198,8 +155,7 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
+end
   if(~timedout)
       rspRT_2      = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -223,14 +179,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -239,37 +192,30 @@ t2wait = 2;
 RestrictKeysForKbCheck(activeKeys);
 ListenChar(2);
 tStart = GetSecs;
-% repeat until a valid key is pressed or we time out
 timedout = false;
-rspRT_3 = 0; 
-rsp.keyCode = [];
-rsp.keyName = [];
+% rspRT_3 = 0; 
+% rsp.keyCode = [];
+% rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+      if ~(keyIsDown) && ((keyTime - tStart) > t2wait) % if key isn't pressed (no oddballs)
           score = score+1;
          break
       end
       if( (keyTime - tStart) > t2wait)
           timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
-      rspRT_3     = keyTime - tStart;
-      rsp.keyCode = keyCode;
-      rsp.keyName = KbName(rsp.keyCode);
-  end
+end
+ % if(~timedout)
+     % rspRT_3     = keyTime - tStart;
+     % rsp.keyCode = keyCode;
+    %  rsp.keyName = KbName(rsp.keyCode);
+ % end
 score
-rspRT_3
+% rspRT_3
 RestrictKeysForKbCheck;
 ListenChar(1) 
 Screen('Flip', window);
-
-%rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
-%rspRT_5 = round(rspRT_4,3);      
 
 % TRIAL 4 PENTAGON
 for x = 1:length(DistractorX_loc)
@@ -293,14 +239,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -314,8 +257,6 @@ rspRT_4 = 0;
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
       if (keyIsDown) %if key is pressed
           score = score+1;
@@ -324,8 +265,7 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true; 
       end
-  end
-  % store code for key pressed and reaction time
+end
   if(~timedout)
       rspRT_4      = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -348,14 +288,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -364,16 +301,13 @@ t2wait = 2;
 RestrictKeysForKbCheck(activeKeys);
 ListenChar(2);
 tStart = GetSecs;
-% repeat until a valid key is pressed or we time out
 timedout = false;
 rspRT_5 = 0; 
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+      if ~(keyIsDown) && timedout == true % if key isn't pressed (no oddballs)
           score = score+1;
          break
       end
@@ -381,7 +315,6 @@ while ~timedout
           timedout = true;
       end
 end
-  % store code for key pressed and reaction time
   if(~timedout)
       rspRT_5     = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -415,14 +348,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -435,9 +365,7 @@ timedout = false;
 rspRT_6 = 0;
 rsp.keyCode = [];
 rsp.keyName = [];
-while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
+while ~timedout % check if a key is pressed
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
       if (keyIsDown) %if key is pressed
           score = score+1;
@@ -447,8 +375,7 @@ while ~timedout
           timedout = true; 
       end
 end
-  % store code for key pressed and reaction time
-  if(~timedout)
+  if (~timedout)  
       rspRT_6      = keyTime - tStart;
       rsp.keyCode = keyCode;
       rsp.keyName = KbName(rsp.keyCode);
@@ -463,22 +390,18 @@ Screen('Flip', window);
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
         draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-        % Draw the rect to the screen
-        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth); % Draw the rect to the screen
     end
 end
 Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -487,16 +410,13 @@ t2wait = 2;
 RestrictKeysForKbCheck(activeKeys);
 ListenChar(2);
 tStart = GetSecs;
-% repeat until a valid key is pressed or we time out
 timedout = false;
 rspRT_7 = 0; 
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+      if ~(keyIsDown) && timedout == true % if key isn't pressed (no oddballs)
           score = score+1;
          break
       end
@@ -504,7 +424,6 @@ while ~timedout
           timedout = true;
       end
 end
-  % store code for key pressed and reaction time
   if(~timedout)
       rspRT_7     = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -539,14 +458,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -560,8 +476,6 @@ rspRT_8 = 0;
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
       if (keyIsDown) %if key is pressed
           score = score+1;
@@ -571,7 +485,6 @@ while ~timedout
           timedout = true; 
       end
 end
-  % store code for key pressed and reaction time
   if(~timedout)
       rspRT_8      = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -606,14 +519,11 @@ Screen('Flip', window);
 WaitSecs(2);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -627,8 +537,6 @@ rspRT_9 = 0;
 rsp.keyCode = [];
 rsp.keyName = [];
 while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
     [ keyIsDown, keyTime, keyCode ] = KbCheck; 
       if (keyIsDown) %if key is pressed
           score = score+1;
@@ -638,7 +546,6 @@ while ~timedout
           timedout = true;
       end
 end
-  % store code for key pressed and reaction time
   if(~timedout)
       rspRT_9      = keyTime - tStart;
       rsp.keyCode = keyCode;
@@ -650,37 +557,26 @@ RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
 
+%rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
+%rspRT_5 = round(rspRT_4,3);    
+
 % RESULTS SCORE PAGE
-% Draw text in the upper portion of the screen in Times in black
-Screen('TextSize', window, 20);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
-
-% Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 15);
-Screen('TextFont', window, 'Times');
+% SCORE
+Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
-
-% Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 15);
-Screen('TextFont', window, 'Times');
+% RESPONSE TIME
+Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, sprintf('Your average response time: %d\n', rspRT_5), 'center', screenYpixels*0.8, black); %After figuring out how to collect responses diplay here.
 
-% Draw text in the lower portion of the screen in Times in black
-Screen('TextSize', window, 10);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
 
-% Flip to the screen
 Screen('Flip', window);
-
-% Query the frame duration
 %ifi = Screen('GetFlipInterval', window);
-
 KbStrokeWait;
-
-% Clear the screen
-sca;
+sca; % clears screen
 
 %%%%%%%%%%%%%%%%%%
 %% 
