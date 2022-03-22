@@ -1,4 +1,240 @@
-% COMBINED INTRO/INSTRUCTIONS/IMAGES/TIMING/SCORES
+% CURRENT UPDATED CODE (3/22 5:05 PM)
+
+% GENERAL SET-UP FOR PTB/SCREEN
+sca;
+close all;
+clear;
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+white = WhiteIndex(screenNumber); black = BlackIndex(screenNumber); % Defining colors
+screensize = [0 0 600 600]; % Screensize
+% Open an on screen window and color it white
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+% Set the blend function for the screen
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+[screenXpixels, screenYpixels] = Screen('WindowSize', window); % Windowsize
+[xCenter, yCenter] = RectCenter(windowRect); % Finding center of screen
+
+% TITLE PAGE: "Visual Search Task"
+Screen('TextSize', window, 60); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
+% Subtitles
+Screen('TextSize', window, 25); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+Screen('Flip', window);
+KbStrokeWait; % Pressing any key to end
+
+%INSTRUCTIONS SLIDE FOR TASK
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
+
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
+    'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
+    'Record your answer when prompted by the response page by pressing the\n\n', ...
+    'space bar to indicate there is an inconsistent shape present.\n\n', ...
+    'Press nothing otherwise.'];  
+DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
+
+Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+Screen('Flip', window);
+KbStrokeWait;
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40]; baseSquare2 = [0 0 35 35];
+color = black; % border color
+penWidth = 3; % border width
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+
+% Shape position of target in Grid for Trials
+% 1st three = squares, 2nd three = pentagons, 3rd three = heptagons
+target_posX = [3, nan, 9, 6, 8, nan, 5, nan, 1];
+target_posY = [2, nan, 7, 9, 2, nan, 10, nan, 8];
+
+% Pixel Coordinates of target in Grid for Trials
+target_pixelX = [189, nan, 456, 322, 412, nan, 278, nan, 100];
+target_pixelY = [145, nan, 367, 457, 145, nan, 500, nan, 411];
+
+% SQUARE TRIALS
+for trial_num = 1:3
+    for x = 1:length(DistractorX_loc)
+        for y = 1:   length(DistractorY_loc)
+            if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
+                draw_square = CenterRectOnPointd(baseSquare2, target_pixelX(trial_num),target_pixelY(trial_num));
+                Screen('FrameRect', window, color, draw_square, penWidth);
+            else
+                draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+                Screen('FrameOval', window, color, draw_circle, penWidth);
+            end
+        end
+    end
+Screen('Flip', window);
+WaitSecs(2);  
+
+% ANSWER screen
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; %accepted keys
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
+ListenChar(2); % suppress echo to the command line for keypresses
+tStart = GetSecs; % repeat until a valid key is pressed or we time out
+timedout = false;
+score  = 0;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
+      if(keyIsDown) %if key is pressed - oddball present
+          score = score+1; %score goes up by one
+          WaitSecs(2);
+          break 
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true;
+      end
+end
+score
+RestrictKeysForKbCheck;
+ListenChar(1);
+Screen('Flip', window);
+end
+
+% PENTAGON TRIALS
+for trial_num = 4:6
+    for x = 1:length(DistractorX_loc)
+        for y = 1:length(DistractorY_loc)  
+            if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
+                numSides = 5;
+                anglesDeg = linspace(0, 360, numSides + 1);
+                anglesRad = anglesDeg * (pi / 180);
+                radius = 20; 
+                xPosVector = -sin(anglesRad) .* radius + target_pixelX(trial_num);
+                yPosVector = -cos(anglesRad) .* radius + target_pixelY(trial_num);
+                Screen('FramePoly', window, color, [xPosVector; yPosVector]', penWidth);
+            else 
+                draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+                Screen('FrameOval', window, color, draw_circle, penWidth);
+            end
+        end
+    end
+Screen('Flip', window);
+WaitSecs(2);
+
+% ANSWER screen
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          WaitSecs(2);
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true; 
+      end
+end
+score 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+end
+
+% HEPTAGON TRIALS
+for trial_num = 7:9
+    for x = 1:length(DistractorX_loc)
+        for y = 1:length(DistractorY_loc)  
+            if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
+                numSides = 7;
+                anglesDeg = linspace(0, 360, numSides + 1);
+                anglesRad = anglesDeg * (pi / 180);
+                radius = 20; 
+                xPosVector = -sin(anglesRad) .* radius + target_pixelX(trial_num);
+                yPosVector = -cos(anglesRad) .* radius + target_pixelY(trial_num);
+                Screen('FramePoly', window, color, [xPosVector; yPosVector]', penWidth);
+            else 
+                draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+                Screen('FrameOval', window, color, draw_circle, penWidth);
+            end
+        end
+    end
+Screen('Flip', window);
+WaitSecs(2);
+
+% ANSWER screen
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          WaitSecs(2);
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true; 
+      end
+end
+score 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+end
+
+% RESULTS SCORE PAGE
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
+% SCORE
+Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+
+Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
+
+Screen('Flip', window);
+KbStrokeWait;
+sca; % clears screen
+
+%% %%%%%%%%%%%%%%%%%
+
+% LONG CODE (written out)
 % Updated 3/22
 
 % GENERAL SET-UP FOR PTB/SCREEN
@@ -61,7 +297,7 @@ DistractorY_loc = linspace(100, 500, 10);
 % TRIAL 1 SQUARE
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
-        if (x == 3) && (y==2)
+        if (x == 3) && (y == 2)
             drawsquare = CenterRectOnPointd(baseSquare2, 189, 145);
             Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
         else 
@@ -227,8 +463,8 @@ for x = 1:length(DistractorX_loc)
             radius = 20; 
             xPosVector = -sin(anglesRad) .* radius + 322;
             yPosVector = -cos(anglesRad) .* radius + 457;
-            rectColor = black; 
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+            color = black; 
+            Screen('FramePoly', window, color, [xPosVector; yPosVector]', penWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -336,8 +572,8 @@ for x = 1:length(DistractorX_loc)
             radius = 20; 
             xPosVector = -sin(anglesRad) .* radius + 412;
             yPosVector = -cos(anglesRad) .* radius + 145;
-            rectColor = black; 
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+            color = black; 
+            Screen('FramePoly', window, color, [xPosVector; yPosVector]', penWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -445,9 +681,9 @@ for x = 1:length(DistractorX_loc)
             radius = 20;
             yPosVector = -cos(anglesRad) .* radius + 500;  
             xPosVector = -sin(anglesRad) .* radius + 278;
-            rectColor = black;
+            color = black;
             lineWidth = 3;
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+            Screen('FramePoly', window, color, [xPosVector; yPosVector]', lineWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -506,9 +742,9 @@ for x = 1:length(DistractorX_loc)
             radius = 20;
             yPosVector = -cos(anglesRad) .* radius + 411;
             xPosVector = -sin(anglesRad) .* radius + 100;   
-            rectColor = black;
+            color = black;
             lineWidth = 3;
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+            Screen('FramePoly', window, color, [xPosVector; yPosVector]', lineWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -638,9 +874,9 @@ for x = 1:length(DistractorX_loc)
             radius = 20;
             yPosVector = -cos(anglesRad) .* radius + 145;
             xPosVector = -sin(anglesRad) .* radius + 412;
-            rectColor = black;
+            color = black;
             lineWidth = 3;
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+            Screen('FramePoly', window, color, [xPosVector; yPosVector]', lineWidth);
         else 
             draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
             Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
@@ -785,13 +1021,13 @@ yPosVector = sin(anglesRad) .* radius + yCenter;
 xPosVector = cos(anglesRad) .* radius + xCenter;
 
 % Set the color of the rect to black
-rectColor = black;
+color = black;
 
 % Width of the lines for our frame
 lineWidth = 6;
 
 % Draw the rect to the screen
-Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+Screen('FramePoly', window, color, [xPosVector; yPosVector]', lineWidth);
 
 % Flip to the screen
 Screen('Flip', window);
@@ -1023,34 +1259,34 @@ centeredRect = CenterRectOnPointd(baseRect, xCenter, yCenter);
 % 0. So, "full red" is [1 0 0]. "Full green" [0 1 0] and "full blue" [0 0
 % 1]. Play around with these numbers and see the result.
 
-rectColor = [1 0 0]; % Define red square...(this will be replaced by the actual images)
-Screen('FillRect', window, rectColor, centeredRect);% Display red square...
+color = [1 0 0]; % Define red square...(this will be replaced by the actual images)
+Screen('FillRect', window, color, centeredRect);% Display red square...
 Screen('Flip', window);
 WaitSecs(3);
 
-rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+color = [0 0 0]; % Define black square... (screen will be black, so this could be 
 % where the task taker has x seconds (two in this case) to say whether
 % all the shapes were the same(right arrow) or not (left arrow))
         %insert if statement here
-Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('FillRect', window, color, centeredRect);% Display black square...
 Screen('Flip', window);
 WaitSecs(2);
 
-rectColor = [1 1 0]; % Define yellow square... (this will be replaced by the actual images)
-Screen('FillRect', window, rectColor, centeredRect);% Display yellow square...
+color = [1 1 0]; % Define yellow square... (this will be replaced by the actual images)
+Screen('FillRect', window, color, centeredRect);% Display yellow square...
 Screen('Flip', window);
 WaitSecs(3);
 
-rectColor = [0 0 0]; % Define black square... (screen will be black, so this could be 
+color = [0 0 0]; % Define black square... (screen will be black, so this could be 
 % where the task taker has x seconds (two in this case) to say whether
 % all the shapes were the same(right arrow) or not (left arrow))
         %insert if statement here
-Screen('FillRect', window, rectColor, centeredRect);% Display black square...
+Screen('FillRect', window, color, centeredRect);% Display black square...
 Screen('Flip', window);
 WaitSecs(2);
 
-rectColor = [0 0 1]; % Define blue square...(this will be replaced by the actual images)
-Screen('FillRect', window, rectColor, centeredRect);% Display blue square...
+color = [0 0 1]; % Define blue square...(this will be replaced by the actual images)
+Screen('FillRect', window, color, centeredRect);% Display blue square...
 Screen('Flip', window);
 WaitSecs(2);
  
@@ -1195,13 +1431,13 @@ yPosVector = -cos(anglesRad) .* radius + yCenter;
 xPosVector = -sin(anglesRad) .* radius + xCenter;
 
 % Set the color of the rect to red
-rectColor = black;
+color = black;
 
 % Width of the lines for our frame
 lineWidth = 6;
 
 % Draw the rect to the screen
-Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+Screen('FramePoly', window, color, [xPosVector; yPosVector]', lineWidth);
 
 % Flip to the screen
 Screen('Flip', window);
