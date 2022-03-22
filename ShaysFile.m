@@ -1,5 +1,5 @@
 % COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE
-% Created 3/21
+% Updated 3/22
 
 %  INTRODUCTORY SLIDE FOR TASK
 % General set-up for screen/PTB
@@ -91,19 +91,6 @@ DistractorX_loc = linspace(100, 500, 10);
 DistractorY_loc = linspace(100, 500, 10);
 %Distractor_mat = [DistractorX_loc, DistractorY_loc];
 
-% Loops through the positions for each shape, drawing 10x10 grid of circles
-
-% Given screen = 600 x 600 pixels, COORDINATES =
-% Pentagon Location: (8, 2) = Pixel Location: (412, 145)
-% Pentagon Location: (3, 7) = Pixel Location: (190, 368)
-% Pentagon Location: (6, 9) = Pixel Location: (190, 368)
-
-% If we make the locations into variables to loop through...
-%pent_coordX = [8, 3];
-%pent_coordY = [2, 7];
-%pent_pixelX = [412, 190];
-%pent_pixelY = [145, 368];
-
 % TRIAL 1 SQUARE
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
@@ -126,6 +113,41 @@ DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
 Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; %accepted keys
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
+ListenChar(2); % suppress echo to the command line for keypresses
+tStart = GetSecs; % repeat until a valid key is pressed or we time out
+timedout = false;
+rspRT_1 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+score  = 0;
+while ~timedout
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
+      if(keyIsDown) %if key is pressed - oddball present
+          score = score+1; %score goes up by one
+          break 
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_1      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_1
+RestrictKeysForKbCheck;
+ListenChar(1);
 Screen('Flip', window);
 WaitSecs(2);
 
@@ -154,6 +176,42 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_2 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_2      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_2 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
 % TRIAL 3 SQUARE (no target)
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
@@ -175,7 +233,47 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 1 PENTAGON
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+rspRT_3 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+          score = score+1;
+         break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true;
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_3     = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_3
+RestrictKeysForKbCheck;
+ListenChar(1) 
+Screen('Flip', window);
+WaitSecs(2);
+
+%rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
+%rspRT_5 = round(rspRT_4,3);      
+
+% TRIAL 4 PENTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)  
         if (x == 6) && (y == 9)
@@ -206,7 +304,43 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 2 PENTAGON (no target)
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_4 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_4      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_4 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 5 PENTAGON (no target)
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc) 
         draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
@@ -226,7 +360,44 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 3 PENTAGON
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+rspRT_5 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+          score = score+1;
+         break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true;
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_5     = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_5
+RestrictKeysForKbCheck;
+ListenChar(1) 
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 6 PENTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)  
         if (x == 8) && (y == 2)
@@ -257,7 +428,43 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 1 HEPTAGON (no target)
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_6 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_6      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_6
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 7 HEPTAGON (no target)
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
         draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
@@ -278,7 +485,44 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 2 HEPTAGON
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+% repeat until a valid key is pressed or we time out
+timedout = false;
+rspRT_7 = 0; 
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if ~(keyIsDown) % if key isn't pressed (no oddballs)
+          score = score+1;
+         break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true;
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_7     = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_7
+RestrictKeysForKbCheck;
+ListenChar(1) 
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 8 HEPTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
         if (x == 5) & (y==10)
@@ -310,7 +554,43 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 3 HEPTAGON
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_8 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_8      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_8 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 9 HEPTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
         if (x == 1) & (y==8)
@@ -342,6 +622,42 @@ DrawFormattedText(window, 'press [space] if non-circle was present', 'center', s
 Screen('Flip', window);
 WaitSecs(2);
 
+% TIMING + SCORE KEEPING
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_9 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if (keyIsDown) %if key is pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_9      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_9 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
 % RESULTS SCORE PAGE
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 20);
@@ -351,7 +667,12 @@ DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'ce
 % Draw text in the middle of the screen in Times in black
 Screen('TextSize', window, 15);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'SCORE:', 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 15);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, sprintf('Your average response time: %d\n', rspRT_5), 'center', screenYpixels*0.8, black); %After figuring out how to collect responses diplay here.
 
 % Draw text in the lower portion of the screen in Times in black
 Screen('TextSize', window, 10);
@@ -371,9 +692,8 @@ KbStrokeWait;
 % Clear the screen
 sca;
 
-
+%%%%%%%%%%%%%%%%%%
 %% 
-
 
 % CODE FOR GRID AND ONE ODD SHAPE!
 % Created 3/21
