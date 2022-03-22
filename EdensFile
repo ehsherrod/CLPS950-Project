@@ -1,5 +1,6 @@
 % CODE RUNNING THROUGH PENTAGON TRIALS W INTRO & END SLIDE
 % EDITED ON 3/22
+%  INTRODUCTORY SLIDE FOR TASK
 % General set-up for screen/PTB
 sca;
 close all;
@@ -80,7 +81,6 @@ Screen('Flip', window);
 % Now we have drawn to the screen we wait for a keyboard button press (any
 % key) to terminate the demo
 KbStrokeWait;
-%% 
 
 % Make a base square of 40 by 40 pixels which your circle fits inside
 baseSquare = [0 0 40 40];
@@ -101,29 +101,33 @@ DistractorY_loc = linspace(100, 500, 10);
 % Pentagon Location: (6, 9) = Pixel Location: (190, 368)
 
 % If we make the locations into variables to loop through...
-%pent_coordX = [8, 3];
-%pent_coordY = [2, 7];
-%pent_pixelX = [412, 190];
-%pent_pixelY = [145, 368];
+pent_posX = [6, 8, nan];
+pent_posY = [9, 2, nan];
+pent_pixelX = [322, 412, nan];
+pent_pixelY = [457, 145, nan];
 
-% TRIAL 1 PENTAGON
-for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc)  
-        if (x == 6) && (y == 9)
-            numSides = 5;
-            anglesDeg = linspace(0, 360, numSides + 1);
-            anglesRad = anglesDeg * (pi / 180);
-            radius = 20; 
-            xPosVector = -sin(anglesRad) .* radius + 322;
-            yPosVector = -cos(anglesRad) .* radius + 457;
-            rectColor = black; 
-            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
-        else 
-            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+trial_num = 1; 
+
+% PENTAGON TRIALS
+for trial_num = 1:3
+    for x = 1:length(DistractorX_loc)
+        for y = 1:length(DistractorY_loc)  
+            if (x == pent_posX(trial_num)) && (y == pent_posY(trial_num))
+                numSides = 5;
+                anglesDeg = linspace(0, 360, numSides + 1);
+                anglesRad = anglesDeg * (pi / 180);
+                radius = 20; 
+                xPosVector = -sin(anglesRad) .* radius + pent_pixelX(trial_num);
+                yPosVector = -cos(anglesRad) .* radius + pent_pixelY(trial_num);
+                rectColor = black; 
+                Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+            else 
+                draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+                Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+            end
         end
     end
-end
+
 Screen('Flip', window);
 WaitSecs(3);
 
@@ -170,62 +174,12 @@ ListenChar(1);
 Screen('Flip', window);
 WaitSecs(2);
 
+trial_num = trial_num + 1;
+end  
+%% 
+
+
 % TRIAL 2 PENTAGON
-for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc) 
-        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
-    end
-end
-Screen('Flip', window);
-WaitSecs(3);
-
-% ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('Flip', window);
-%WaitSecs(2);
-
-% TIMING ASPECT + SCORE KEEPING
-
-KbName('UnifyKeyNames');
-activeKeys = [KbName('space')];
-t2wait = 2; 
-RestrictKeysForKbCheck(activeKeys);
-ListenChar(2);
-tStart = GetSecs;
-timedout = false;
-rspRT_2 = 0;
-rsp.keyCode = [];
-rsp.keyName = [];
-while ~timedout
-    % check if a key is pressed
-    % only keys specified in activeKeys are considered valid
-    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if ~(keyIsDown) %if key not pressed
-          score = score+1;
-          break
-      end
-      if( (keyTime - tStart) > t2wait)
-          timedout = true 
-      end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
-      rspRT_2      = keyTime - tStart;
-      rsp.keyCode = keyCode;
-      rsp.keyName = KbName(rsp.keyCode);
-  end
-score
-rspRT_2 
-RestrictKeysForKbCheck;
-ListenChar(1)
-Screen('Flip', window);
-WaitSecs(2);
-
-
-% TRIAL 3 PENTAGON
 
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)  
@@ -289,6 +243,63 @@ score
 ListenChar(1) 
 WaitSecs(2);
 
+
+% TRIAL 3 PENTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc) 
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('Flip', window);
+%WaitSecs(2);
+
+% TIMING ASPECT + SCORE KEEPING
+
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')];
+t2wait = 2; 
+RestrictKeysForKbCheck(activeKeys);
+ListenChar(2);
+tStart = GetSecs;
+timedout = false;
+rspRT_2 = 0;
+rsp.keyCode = [];
+rsp.keyName = [];
+while ~timedout
+    % check if a key is pressed
+    % only keys specified in activeKeys are considered valid
+    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
+      if ~(keyIsDown) %if key not pressed
+          score = score+1;
+          break
+      end
+      if( (keyTime - tStart) > t2wait)
+          timedout = true 
+      end
+  end
+  % store code for key pressed and reaction time
+  if(~timedout)
+      rspRT_2      = keyTime - tStart;
+      rsp.keyCode = keyCode;
+      rsp.keyName = KbName(rsp.keyCode);
+  end
+score
+rspRT_2 
+RestrictKeysForKbCheck;
+ListenChar(1)
+Screen('Flip', window);
+WaitSecs(2);
+
+
+
 rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
 rspRT_5 = round(rspRT_4,3);      
 
@@ -323,9 +334,7 @@ ifi = Screen('GetFlipInterval', window);
 KbStrokeWait;
 
 % Clear the screen
-sca;   
-
-
+sca;
 
 
 
