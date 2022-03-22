@@ -1,4 +1,4 @@
-% CODE LOOPING THROUGH ALL TRIALS FOR ALL FIGURES 
+% CODE LOOPING THROUGH PRESENTATION OF ALL TRIALS FOR ALL FIGURES 
 % CODED ON 3/22
 % General set-up for screen/PTB
 sca;
@@ -107,8 +107,8 @@ trial_num = 1;
 
 % SQUARE TRIALS
 for trial_num = 1:3
-    for x = length(DistractorX_loc)
-        for y = length(DistractorY_loc)
+    for x = 1:length(DistractorX_loc)
+        for y = 1:   length(DistractorY_loc)
             if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
                 draw_square = CenterRectOnPointd(baseSquare2, target_pixelX(trial_num),target_pixelY(trial_num));
                 Screen('FrameRect', window, color, draw_square, penWidth);
@@ -165,7 +165,6 @@ ListenChar(1);
 Screen('Flip', window);
 WaitSecs(2);
 
-trial_num = trial_num + 1;
 end
 
 % PENTAGON TRIALS
@@ -234,7 +233,6 @@ ListenChar(1);
 Screen('Flip', window);
 WaitSecs(2);
 
-trial_num = trial_num + 1;
 end
 
 % HEPTAGON TRIALS
@@ -303,10 +301,7 @@ ListenChar(1);
 Screen('Flip', window);
 WaitSecs(2);
 
-trial_num = trial_num + 1;
-end  
-%% 
-
+end
 
 rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
 rspRT_5 = round(rspRT_4,3);      
@@ -342,7 +337,7 @@ ifi = Screen('GetFlipInterval', window);
 KbStrokeWait;
 
 % Clear the screen
-sca;   
+sca; 
 
 
 
