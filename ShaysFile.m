@@ -30,7 +30,7 @@ Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 [xCenter, yCenter] = RectCenter(windowRect);
 
 % TITLE PAGE: "Visual Search Task"
-Screen('TextSize', window, 70);
+Screen('TextSize', window, 60);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
 
@@ -39,7 +39,7 @@ Screen('TextSize', window, 25);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
 
-Screen('TextSize', window, 10);
+Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
@@ -54,7 +54,7 @@ KbStrokeWait;
 
 %INSTRUCTIONS SLIDE FOR TASK
 % Draw text in the upper portion of the screen in Times in black
-Screen('TextSize', window, 30);
+Screen('TextSize', window, 40);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
@@ -64,7 +64,7 @@ Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
 
 % Draw text in the lower portion of the screen in Times in black
-Screen('TextSize', window, 10);
+Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
@@ -104,6 +104,77 @@ DistractorY_loc = linspace(100, 500, 10);
 %pent_pixelX = [412, 190];
 %pent_pixelY = [145, 368];
 
+% TRIAL 1 SQUARE
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 3) && (y==2)
+            drawsquare = CenterRectOnPointd(baseSquare2, 189, 145);
+            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 2 SQUARE
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 9) && (y==7)
+            drawsquare = CenterRectOnPointd(baseSquare2, 456, 367);
+            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 3 SQUARE (no target)
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+        % Draw the rect to the screen
+        Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+    end
+end
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
 % TRIAL 1 PENTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)  
@@ -129,10 +200,13 @@ WaitSecs(3);
 Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 2 PENTAGON
+% TRIAL 2 PENTAGON (no target)
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc) 
         draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
@@ -146,6 +220,9 @@ WaitSecs(3);
 Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
 WaitSecs(2);
 
@@ -174,54 +251,13 @@ WaitSecs(3);
 Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('Flip', window);
-WaitSecs(2);
-
-% TRIAL 1 FOR SQUARE SHAPE (yes target)
-for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc)
-        if (x == 3) && (y==2)
-            drawsquare = CenterRectOnPointd(baseSquare2, 189, 145);
-            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
-        else 
-            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
-        end
-    end
-end 
-Screen('Flip', window);
-WaitSecs(3);
-
-% ANSWER screen
-Screen('TextSize', window, 30);
+Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
 WaitSecs(2);
 
-% TRIAL 2 FOR SQUARE SHAPE (yes target)
-for x = 1:length(DistractorX_loc)
-    for y = 1:length(DistractorY_loc)
-        if (x == 9) && (y==7)
-            drawsquare = CenterRectOnPointd(baseSquare2, 456, 367);
-            Screen('FrameRect', window, squarecolor, drawsquare, penWidth);
-        else 
-            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
-            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
-        end
-    end
-end 
-Screen('Flip', window);
-WaitSecs(3);
-
-% ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
-Screen('Flip', window);
-WaitSecs(2);
-
-% TRIAL 3 FOR SQUARE SHAPE (no target)
+% TRIAL 1 HEPTAGON (no target)
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
         draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
@@ -236,9 +272,77 @@ WaitSecs(3);
 Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
 WaitSecs(2);
 
+% TRIAL 2 HEPTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 5) & (y==10)
+            numSides = 7;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20;
+            yPosVector = -cos(anglesRad) .* radius + 500;  
+            xPosVector = -sin(anglesRad) .* radius + 278;
+            rectColor = black;
+            lineWidth = 3;
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% TRIAL 3 HEPTAGON
+for x = 1:length(DistractorX_loc)
+    for y = 1:length(DistractorY_loc)
+        if (x == 1) & (y==8)
+            numSides = 7;
+            anglesDeg = linspace(0, 360, numSides + 1);
+            anglesRad = anglesDeg * (pi / 180);
+            radius = 20;
+            yPosVector = -cos(anglesRad) .* radius + 411;
+            xPosVector = -sin(anglesRad) .* radius + 100;   
+            rectColor = black;
+            lineWidth = 3;
+            Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', lineWidth);
+        else 
+            draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+            Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+        end
+    end
+end 
+Screen('Flip', window);
+WaitSecs(3);
+
+% ANSWER screen
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
+Screen('Flip', window);
+WaitSecs(2);
+
+% RESULTS SCORE PAGE
 % Draw text in the upper portion of the screen in Times in black
 Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
