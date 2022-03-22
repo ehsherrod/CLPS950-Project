@@ -135,7 +135,7 @@ while ~timedout
           break 
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true
+          timedout = true;
       end
   end
   % store code for key pressed and reaction time
@@ -196,7 +196,7 @@ while ~timedout
           break
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true 
+          timedout = true;
       end
   end
   % store code for key pressed and reaction time
@@ -324,7 +324,7 @@ while ~timedout
           break
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true 
+          timedout = true; 
       end
   end
   % store code for key pressed and reaction time
@@ -448,7 +448,7 @@ while ~timedout
           break
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true 
+          timedout = true; 
       end
   end
   % store code for key pressed and reaction time
@@ -525,7 +525,7 @@ WaitSecs(2);
 % TRIAL 8 HEPTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
-        if (x == 5) & (y==10)
+        if (x == 5) && (y==10)
             numSides = 7;
             anglesDeg = linspace(0, 360, numSides + 1);
             anglesRad = anglesDeg * (pi / 180);
