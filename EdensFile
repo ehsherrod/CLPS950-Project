@@ -6,7 +6,7 @@ close all;
 clear;
 PsychDefaultSetup(2);
 screens = Screen('Screens');
-screenNumber = max(screens);
+screenNumber = max(screens);  
 
 % Defining colors
 white = WhiteIndex(screenNumber);
@@ -123,14 +123,13 @@ Screen('Flip', window);
 WaitSecs(3);  
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-%WaitSecs(2);
 
-%TIMING ASPECT + SCORE KEEPING
-
+% TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
 activeKeys = [KbName('space')]; %accepted keys
 t2wait = 2; % set value for maximum time to wait for response (in seconds)
@@ -143,17 +142,16 @@ rsp.keyCode = [];
 rsp.keyName = [];
 score  = 0;
 while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
-      if(keyIsDown) %if key is pressed
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
+      if(keyIsDown) %if key is pressed - oddball present
           score = score+1; %score goes up by one
           break 
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true
+          timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
+end
+  if(~timedout) % store code for key pressed and reaction time
       rspRT_1      = keyTime - tStart;
       rsp.keyCode = keyCode;
       rsp.keyName = KbName(rsp.keyCode);
@@ -163,7 +161,6 @@ rspRT_1
 RestrictKeysForKbCheck;
 ListenChar(1);
 Screen('Flip', window);
-WaitSecs(2);
 
 end
 
@@ -191,14 +188,13 @@ Screen('Flip', window);
 WaitSecs(3);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-%WaitSecs(2);
 
-%TIMING ASPECT + SCORE KEEPING
-
+% TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
 activeKeys = [KbName('space')]; %accepted keys
 t2wait = 2; % set value for maximum time to wait for response (in seconds)
@@ -211,17 +207,16 @@ rsp.keyCode = [];
 rsp.keyName = [];
 score  = 0;
 while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
-      if(keyIsDown) %if key is pressed
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
+      if(keyIsDown) %if key is pressed - oddball present
           score = score+1; %score goes up by one
           break 
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true
+          timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
+end
+  if(~timedout) % store code for key pressed and reaction time
       rspRT_1      = keyTime - tStart;
       rsp.keyCode = keyCode;
       rsp.keyName = KbName(rsp.keyCode);
@@ -231,7 +226,6 @@ rspRT_1
 RestrictKeysForKbCheck;
 ListenChar(1);
 Screen('Flip', window);
-WaitSecs(2);
 
 end
 
@@ -259,14 +253,13 @@ Screen('Flip', window);
 WaitSecs(3);
 
 % ANSWER screen
-Screen('TextSize', window, 30);
-Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-%WaitSecs(2);
 
-%TIMING ASPECT + SCORE KEEPING
-
+% TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
 activeKeys = [KbName('space')]; %accepted keys
 t2wait = 2; % set value for maximum time to wait for response (in seconds)
@@ -279,27 +272,25 @@ rsp.keyCode = [];
 rsp.keyName = [];
 score  = 0;
 while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
-      if(keyIsDown) %if key is pressed
+    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
+      if(keyIsDown) %if key is pressed - oddball present
           score = score+1; %score goes up by one
           break 
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true
+          timedout = true;
       end
-  end
-  % store code for key pressed and reaction time
-  if(~timedout)
+end
+  if(~timedout) % store code for key pressed and reaction time
       rspRT_1      = keyTime - tStart;
       rsp.keyCode = keyCode;
       rsp.keyName = KbName(rsp.keyCode);
-  end   
+  end
 score
 rspRT_1
 RestrictKeysForKbCheck;
 ListenChar(1);
-Screen('Flip', window);
-WaitSecs(2);
+Screen('Flip', window);  
 
 end
 
