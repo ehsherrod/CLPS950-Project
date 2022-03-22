@@ -13,7 +13,7 @@ screenNumber = max(screens);
 % Defining colors
 white = WhiteIndex(screenNumber);
 black = BlackIndex(screenNumber);
-
+ 
 % Screensize
 screensize = [0 0 600 600];
 
@@ -47,35 +47,37 @@ DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0
 Screen('Flip', window);
 
 % Query the frame duration
-ifi = Screen('GetFlipInterval', window);
+%ifi = Screen('GetFlipInterval', window);
 
 % Pressing any key to end
 KbStrokeWait;
 
 %INSTRUCTIONS SLIDE FOR TASK
 % Draw text in the upper portion of the screen in Times in black
-Screen('TextSize', window, 40);
+Screen('TextSize', window, 30);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
 % Draw text in the middle of the screen in Times in black
-Screen('TextSize', window, 15);
+Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
-DrawFormattedText(window, 'For each image displayed, identify whether there is an inconsistent shape present or not', 'center', screenYpixels*0.6, black);
+Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
+    'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
+    'Record your answer when prompted by the response page by pressing the\n\n', ...
+    'space bar to indicate there is an inconsistent shape present.\n\n', ...
+    'Press nothing otherwise.'];  
+DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
 
 % Draw text in the lower portion of the screen in Times in black
-Screen('TextSize', window, 20);
+Screen('TextSize', window, 10);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
 % Flip to the screen
 Screen('Flip', window);
 
-% Query the frame duration
 %ifi = Screen('GetFlipInterval', window);
 
-% Now we have drawn to the screen we wait for a keyboard button press (any
-% key) to terminate the demo
 KbStrokeWait;
 
 % Make a base square of 40 by 40 pixels which your circle fits inside
@@ -104,7 +106,7 @@ for x = 1:length(DistractorX_loc)
     end
 end 
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -114,7 +116,6 @@ Screen('TextSize', window, 20);
 Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TIMING + SCORE KEEPING
 KbName('UnifyKeyNames');
@@ -149,7 +150,6 @@ rspRT_1
 RestrictKeysForKbCheck;
 ListenChar(1);
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 2 SQUARE
 for x = 1:length(DistractorX_loc)
@@ -164,7 +164,7 @@ for x = 1:length(DistractorX_loc)
     end
 end 
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -210,7 +210,6 @@ rspRT_2
 RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 3 SQUARE (no target)
 for x = 1:length(DistractorX_loc)
@@ -221,7 +220,7 @@ for x = 1:length(DistractorX_loc)
     end
 end
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -268,7 +267,6 @@ rspRT_3
 RestrictKeysForKbCheck;
 ListenChar(1) 
 Screen('Flip', window);
-WaitSecs(2);
 
 %rspRT_4 = (rspRT_1+rspRT_2+rspRT_3)/3;
 %rspRT_5 = round(rspRT_4,3);      
@@ -292,7 +290,7 @@ for x = 1:length(DistractorX_loc)
     end
 end
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -338,7 +336,6 @@ rspRT_4
 RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 5 PENTAGON (no target)
 for x = 1:length(DistractorX_loc)
@@ -348,7 +345,7 @@ for x = 1:length(DistractorX_loc)
     end
 end
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -383,7 +380,7 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true;
       end
-  end
+end
   % store code for key pressed and reaction time
   if(~timedout)
       rspRT_5     = keyTime - tStart;
@@ -395,7 +392,6 @@ rspRT_5
 RestrictKeysForKbCheck;
 ListenChar(1) 
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 6 PENTAGON
 for x = 1:length(DistractorX_loc)
@@ -416,7 +412,7 @@ for x = 1:length(DistractorX_loc)
     end
 end
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -450,7 +446,7 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true; 
       end
-  end
+end
   % store code for key pressed and reaction time
   if(~timedout)
       rspRT_6      = keyTime - tStart;
@@ -462,7 +458,6 @@ rspRT_6
 RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 7 HEPTAGON (no target)
 for x = 1:length(DistractorX_loc)
@@ -473,7 +468,7 @@ for x = 1:length(DistractorX_loc)
     end
 end
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -508,7 +503,7 @@ while ~timedout
       if( (keyTime - tStart) > t2wait)
           timedout = true;
       end
-  end
+end
   % store code for key pressed and reaction time
   if(~timedout)
       rspRT_7     = keyTime - tStart;
@@ -520,7 +515,6 @@ rspRT_7
 RestrictKeysForKbCheck;
 ListenChar(1) 
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 8 HEPTAGON
 for x = 1:length(DistractorX_loc)
@@ -542,7 +536,7 @@ for x = 1:length(DistractorX_loc)
     end
 end 
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -574,9 +568,9 @@ while ~timedout
           break
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true 
+          timedout = true; 
       end
-  end
+end
   % store code for key pressed and reaction time
   if(~timedout)
       rspRT_8      = keyTime - tStart;
@@ -588,12 +582,11 @@ rspRT_8
 RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
-WaitSecs(2);
 
 % TRIAL 9 HEPTAGON
 for x = 1:length(DistractorX_loc)
     for y = 1:length(DistractorY_loc)
-        if (x == 1) & (y==8)
+        if (x == 1) && (y==8)
             numSides = 7;
             anglesDeg = linspace(0, 360, numSides + 1);
             anglesRad = anglesDeg * (pi / 180);
@@ -610,7 +603,7 @@ for x = 1:length(DistractorX_loc)
     end
 end 
 Screen('Flip', window);
-WaitSecs(3);
+WaitSecs(2);
 
 % ANSWER screen
 Screen('TextSize', window, 30);
@@ -642,9 +635,9 @@ while ~timedout
           break
       end
       if( (keyTime - tStart) > t2wait)
-          timedout = true 
+          timedout = true;
       end
-  end
+end
   % store code for key pressed and reaction time
   if(~timedout)
       rspRT_9      = keyTime - tStart;
@@ -656,7 +649,6 @@ rspRT_9
 RestrictKeysForKbCheck;
 ListenChar(1)
 Screen('Flip', window);
-WaitSecs(2);
 
 % RESULTS SCORE PAGE
 % Draw text in the upper portion of the screen in Times in black
@@ -683,10 +675,8 @@ DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95,
 Screen('Flip', window);
 
 % Query the frame duration
-ifi = Screen('GetFlipInterval', window);
+%ifi = Screen('GetFlipInterval', window);
 
-% Now we have drawn to the screen we wait for a keyboard button press (any
-% key) to terminate the demo
 KbStrokeWait;
 
 % Clear the screen
