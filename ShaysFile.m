@@ -1,4 +1,4 @@
-% CURRENT UPDATED CODE (3/22 5:05 PM)
+% CURRENT UPDATED CODE (3/23 2:53 PM)
 
 % GENERAL SET-UP FOR PTB/SCREEN
 sca;
@@ -22,6 +22,7 @@ DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, bl
 % Subtitles
 Screen('TextSize', window, 25); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+% EXIT subtitle
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
@@ -32,14 +33,14 @@ KbStrokeWait; % Pressing any key to end
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
-Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
+Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
     'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
     'Record your answer when prompted by the response page by pressing the\n\n', ...
     'space bar to indicate there is an inconsistent shape present.\n\n', ...
     'Press nothing otherwise.'];  
 DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
-
+% EXIT subtitle
 Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
@@ -63,6 +64,14 @@ target_posY = [2, nan, 7, 9, 2, nan, 10, nan, 8];
 target_pixelX = [189, nan, 456, 322, 412, nan, 278, nan, 100];
 target_pixelY = [145, nan, 367, 457, 145, nan, 500, nan, 411];
 
+% Initialising for the score keeping 
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; 
+RestrictKeysForKbCheck(activeKeys); 
+ListenChar(2); % suppress echo to the command line for keypresses
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+score  = 0;
+
 % SQUARE TRIALS
 for trial_num = 1:3
     for x = 1:length(DistractorX_loc)
@@ -79,37 +88,33 @@ for trial_num = 1:3
 Screen('Flip', window);
 WaitSecs(2);  
 
-% ANSWER screen
+% ANSWER screen & BUTTON Collecting code
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-
-% TIMING + SCORE KEEPING
-KbName('UnifyKeyNames');
-activeKeys = [KbName('space')]; %accepted keys
-t2wait = 2; % set value for maximum time to wait for response (in seconds)
-RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
-ListenChar(2); % suppress echo to the command line for keypresses
-tStart = GetSecs; % repeat until a valid key is pressed or we time out
+tStart = GetSecs; 
 timedout = false;
-score  = 0;
-while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if spacebar is pressed
-      if(keyIsDown) %if key is pressed - oddball present
-          score = score+1; %score goes up by one
-          WaitSecs(2);
-          break 
-      end
-      if( (keyTime - tStart) > t2wait)
-          timedout = true;
-      end
-end
-score
+        while ~timedout
+            [ keyIsDown, keyTime, keyCode ] = KbCheck;
+            disp(keyTime)
+            if(keyIsDown) && (trial_num == 1 || trial_num == 3)  
+                score = score+1; 
+                break
+            elseif ~(keyIsDown) && ((keyTime - tStart) > t2wait) && (trial_num == 2) 
+                score = score+1; 
+                break
+            end
+            if( (keyTime - tStart) > t2wait)
+                timedout = true;
+            end
+             score;
+        end
+        WaitSecs(2);
+        score = score;  
 RestrictKeysForKbCheck;
-ListenChar(1);
-Screen('Flip', window);
+ListenChar(1);  
 end
 
 % PENTAGON TRIALS
@@ -119,7 +124,7 @@ for trial_num = 4:6
             if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
                 numSides = 5;
                 anglesDeg = linspace(0, 360, numSides + 1);
-                anglesRad = anglesDeg * (pi / 180);
+                anglesRad = anglesDeg * (pi/180);
                 radius = 20; 
                 xPosVector = -sin(anglesRad) .* radius + target_pixelX(trial_num);
                 yPosVector = -cos(anglesRad) .* radius + target_pixelY(trial_num);
@@ -133,36 +138,33 @@ for trial_num = 4:6
 Screen('Flip', window);
 WaitSecs(2);
 
-% ANSWER screen
+% ANSWER screen & BUTTON Collecting code
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-
-% TIMING + SCORE KEEPING
-KbName('UnifyKeyNames');
-activeKeys = [KbName('space')];
-t2wait = 2; 
-RestrictKeysForKbCheck(activeKeys);
-ListenChar(2);
-tStart = GetSecs;
+tStart = GetSecs; 
 timedout = false;
-while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if (keyIsDown) %if key is pressed
-          score = score+1;
-          WaitSecs(2);
-          break
-      end
-      if( (keyTime - tStart) > t2wait)
-          timedout = true; 
-      end
-end
-score 
+        while ~timedout
+            [ keyIsDown, keyTime, keyCode ] = KbCheck;
+            disp(keyTime)
+            if(keyIsDown) && (trial_num == 4 || trial_num == 5)  
+                score = score+1; 
+                break
+            elseif ~(keyIsDown) && ((keyTime - tStart) > t2wait) && (trial_num == 6) 
+                score = score+1; 
+                break
+            end
+            if( (keyTime - tStart) > t2wait)
+                timedout = true;
+            end
+             score;
+        end
+        WaitSecs(2);
+        score = score;  
 RestrictKeysForKbCheck;
-ListenChar(1)
-Screen('Flip', window);
+ListenChar(1);
 end
 
 % HEPTAGON TRIALS
@@ -172,7 +174,7 @@ for trial_num = 7:9
             if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
                 numSides = 7;
                 anglesDeg = linspace(0, 360, numSides + 1);
-                anglesRad = anglesDeg * (pi / 180);
+                anglesRad = anglesDeg * (pi/180);
                 radius = 20; 
                 xPosVector = -sin(anglesRad) .* radius + target_pixelX(trial_num);
                 yPosVector = -cos(anglesRad) .* radius + target_pixelY(trial_num);
@@ -186,36 +188,33 @@ for trial_num = 7:9
 Screen('Flip', window);
 WaitSecs(2);
 
-% ANSWER screen
+% ANSWER screen & BUTTON Collecting code
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
 Screen('Flip', window);
-
-% TIMING + SCORE KEEPING
-KbName('UnifyKeyNames');
-activeKeys = [KbName('space')];
-t2wait = 2; 
-RestrictKeysForKbCheck(activeKeys);
-ListenChar(2);
-tStart = GetSecs;
+tStart = GetSecs; 
 timedout = false;
-while ~timedout
-    [ keyIsDown, keyTime, keyCode ] = KbCheck; 
-      if (keyIsDown) %if key is pressed
-          score = score+1;
-          WaitSecs(2);
-          break
-      end
-      if( (keyTime - tStart) > t2wait)
-          timedout = true; 
-      end
-end
-score 
+        while ~timedout
+            [ keyIsDown, keyTime, keyCode ] = KbCheck;
+            disp(keyTime)
+            if(keyIsDown) && (trial_num == 7 || trial_num == 9)  
+                score = score+1; 
+                break
+            elseif ~(keyIsDown) && ((keyTime - tStart) > t2wait) && (trial_num == 8) 
+                score = score+1; 
+                break
+            end
+            if ((keyTime - tStart) > t2wait)
+                timedout = true;
+            end
+             score;
+        end
+        WaitSecs(2);
+        score = score;  
 RestrictKeysForKbCheck;
-ListenChar(1)
-Screen('Flip', window);
+ListenChar(1);
 end
 
 % RESULTS SCORE PAGE
@@ -224,8 +223,8 @@ DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'ce
 % SCORE
 Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
-
-Screen('TextSize', window, 10); Screen('TextFont', window, 'Times');
+% EXIT subtitle
+Screen('TextSize', window, 12); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
 
 Screen('Flip', window);
