@@ -1,3 +1,219 @@
+UPDATED AS OF 22/03
+
+% CODE RUNNING THROUGH PENTAGON TRIALS W INTRO & END SLIDE
+% EDITED ON 3/22
+%  INTRODUCTORY SLIDE FOR TASK
+% General set-up for screen/PTB
+sca;
+close all;
+clear;
+PsychDefaultSetup(2);
+screens = Screen('Screens');
+screenNumber = max(screens);
+
+% Defining colors
+white = WhiteIndex(screenNumber);
+black = BlackIndex(screenNumber);
+
+% Screensize
+screensize = [0 0 600 600];
+
+% Open an on screen window and color it white
+[window, windowRect] = PsychImaging('OpenWindow', screenNumber, white, screensize);
+
+% Set the blend function for the screen
+Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
+
+% Windowsize
+[screenXpixels, screenYpixels] = Screen('WindowSize', window);
+
+% Finding center of screen
+[xCenter, yCenter] = RectCenter(windowRect);
+
+% TITLE PAGE: "Visual Search Task"
+Screen('TextSize', window, 70);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
+
+% Subtitles
+Screen('TextSize', window, 25);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center', screenYpixels*0.75, black);
+
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+ifi = Screen('GetFlipInterval', window);
+
+spaceKey = KbName('space');
+
+% Pressing any key to end
+KbStrokeWait
+
+%INSTRUCTIONS SLIDE FOR TASK
+% Draw text in the upper portion of the screen in Times in black
+Screen('TextSize', window, 30);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
+
+% Draw text in the middle of the screen in Times in black
+Screen('TextSize', window, 20);
+Screen('TextFont', window, 'Times');
+Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
+    'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
+    'Record your answer when prompted by the response page by pressing the\n\n', ...
+    'space bar to indicate there is an inconsistent shape present.\n\n', ...
+    'Press nothing otherwise.'];  
+DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
+
+% Draw text in the lower portion of the screen in Times in black
+Screen('TextSize', window, 10);
+Screen('TextFont', window, 'Times');
+DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
+
+% Flip to the screen
+Screen('Flip', window);
+
+% Query the frame duration
+%ifi = Screen('GetFlipInterval', window);
+
+% Now we have drawn to the screen we wait for a keyboard button press (any
+% key) to terminate the demo
+KbStrokeWait;
+
+% Make a base square of 40 by 40 pixels which your circle fits inside
+baseSquare = [0 0 40 40];
+
+circlecolor = black; % border color
+penWidth = 3; % border width
+
+% Define dimensions of grid using pixel coordinates, and # of shapes
+DistractorX_loc = linspace(100, 500, 10);
+DistractorY_loc = linspace(100, 500, 10);
+%Distractor_mat = [DistractorX_loc, DistractorY_loc];
+
+% Loops through the positions for each shape, drawing 10x10 grid of circles
+
+% Given screen = 600 x 600 pixels, COORDINATES =
+% Pentagon Location: (8, 2) = Pixel Location: (412, 145)
+% Pentagon Location: (3, 7) = Pixel Location: (190, 368)
+% Pentagon Location: (6, 9) = Pixel Location: (190, 368)
+
+% If we make the locations into variables to loop through...
+pent_posX = [6, 8, nan];
+pent_posY = [9, 2, nan];
+pent_pixelX = [322, 412, nan];
+pent_pixelY = [457, 145, nan];
+
+% trial_num = 1; 
+
+
+% timing loop:
+KbName('UnifyKeyNames');
+activeKeys = [KbName('space')]; %accepted keys
+RestrictKeysForKbCheck(activeKeys); % restrict the keys for keyboard input to the keys we want
+ListenChar(2); % suppress echo to the command line for keypresses
+t2wait = 2; % set value for maximum time to wait for response (in seconds)
+score  = 0;
+
+% PENTAGON TRIALS
+for trial_num = 1:3
+    for x = 1:length(DistractorX_loc)
+        for y = 1:length(DistractorY_loc)  
+            if (x == pent_posX(trial_num)) && (y == pent_posY(trial_num))
+                numSides = 5;
+                anglesDeg = linspace(0, 360, numSides + 1);
+                anglesRad = anglesDeg * (pi / 180);
+                radius = 20; 
+                xPosVector = -sin(anglesRad) .* radius + pent_pixelX(trial_num);
+                yPosVector = -cos(anglesRad) .* radius + pent_pixelY(trial_num);
+                rectColor = black; 
+                Screen('FramePoly', window, rectColor, [xPosVector; yPosVector]', penWidth);
+            else 
+                draw_circle = CenterRectOnPointd(baseSquare, DistractorX_loc(x), DistractorY_loc(y));
+                Screen('FrameOval', window, circlecolor, draw_circle, penWidth);
+            end
+        end
+    end
+
+Screen('Flip', window);
+WaitSecs(3);
+
+%     for ix = 1:trial_num 
+
+        %ANSWER screen
+        Screen('TextSize', window, 30);
+        Screen('TextFont', window, 'Times');
+        DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
+        Screen('Flip', window);
+        %WaitSecs(2);
+
+        tStart = GetSecs; % repeat until a valid key is pressed or we time out
+        timedout = false;
+        %rspRT_1 = 0; 
+        %rsp.keyCode = [];
+        %rsp.keyName = [];
+                while ~timedout
+                    [ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
+                    disp(keyTime)
+                    if(keyIsDown) && (trial_num == 1 | trial_num== 2)  %if key is pressed
+                        disp('top')
+                        score = score+1; %score goes up by one
+                        break
+                    elseif ~(keyIsDown) && ( (keyTime - tStart) > t2wait) && (trial_num == 3) %if key not pressed & time has run out 
+                        disp('down')
+                        disp(((keyTime - tStart) > t2wait))
+
+                        score = score+1; %score goes up by one
+                        break
+                    end
+                    if( (keyTime - tStart) > t2wait)
+                        timedout = true;
+                    end
+                     score
+                     %trial_num = trial_num + 1;
+                     
+                end
+                Screen('Flip', window);
+                WaitSecs(2);
+                score = score  
+%     end
+    RestrictKeysForKbCheck;
+    ListenChar(1);
+    score = score    
+end
+                    %if(~timedout)
+                    %   rspRT_1      = keyTime - tStart;
+                    %   rsp.keyCode = keyCode;
+                    %   rsp.keyName = KbName(rsp.keyCode);
+                    %end
+            %elseif ix == 3
+                %while ~timedout
+                    %[ keyIsDown, keyTime, keyCode ] = KbCheck;% check if a key is pressed, only keys specified in activeKeys are considered valid
+                    %if ~(keyIsDown) && ( (keyTime - tStart) > t2wait) && (ix == 3) %if key not pressed & time has run out 
+                        %score = score+1; %score goes up by one
+                        %break
+                    %end
+                    %if( (keyTime - tStart) > t2wait)
+                        %timedout = true
+                    %end
+                %end
+                    %if(~timedout)
+                    %   rspRT_2      = keyTime - tStart;
+                    %   rsp.keyCode = keyCode;
+                    %   rsp.keyName = KbName(rsp.keyCode);
+                    %end
+                    %rspRT_2
+                    
+                    
+%%%%%%%%%%%%%%%%%%%%%%%%%%$%%%%
+
+
 % COMBINED INTRO/INSTRUCTIONS/IMAGES/END CODE +TIMING/SCORE KEEPING/BUTTON CLICK TRACKING.
 % Created 3/21
 
