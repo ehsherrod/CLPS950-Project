@@ -35,9 +35,9 @@ DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
 
 Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
-    'Identify whether there is an inconsistent shape (non-circle) present or not.\n\n\n\n', ...
+    'Identify whether there is an target shape (non-circle) present or not.\n\n\n\n', ...
     'Record your answer when prompted by the response page by pressing the\n\n', ...
-    'space bar to indicate there is an inconsistent shape present.\n\n', ...
+    'space bar to indicate there is an target shape present.\n\n', ...
     'Press nothing otherwise.'];  
 DrawFormattedText(window, Instructions, 'center', screenYpixels*0.5, black);  
 % EXIT subtitle
@@ -47,7 +47,8 @@ DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0
 Screen('Flip', window);
 KbStrokeWait;
 
-% Make a base square of 40 by 40 pixels which your circle fits inside
+% Make a base square of 40 by 40 pixels which each distractor circle fits inside
+% Make a base square of 35 by 35 pixels for target square shape
 baseSquare = [0 0 40 40]; baseSquare2 = [0 0 35 35];
 color = black; % border color
 penWidth = 3; % border width
@@ -55,12 +56,13 @@ penWidth = 3; % border width
 DistractorX_loc = linspace(100, 500, 10);
 DistractorY_loc = linspace(100, 500, 10);
 
-% Shape position of target in Grid for Trials
-% 1st three = squares, 2nd three = pentagons, 3rd three = heptagons
+% Shape position of each target in Grid for Trials
+% 1st 3 digits: square trials, 2nd 3 = pentagon trials, 3rd 3 = heptagon
 target_posX = [3, nan, 9, 6, 8, nan, 5, nan, 1];
 target_posY = [2, nan, 7, 9, 2, nan, 10, nan, 8];
 
-% Pixel Coordinates of target in Grid for Trials
+% Pixel Coordinates of each target in Grid for Trials
+% same format as the shape position vectors(1st 3 digits: square trials)
 target_pixelX = [189, nan, 456, 322, 412, nan, 278, nan, 100];
 target_pixelY = [145, nan, 367, 457, 145, nan, 500, nan, 411];
 
@@ -73,6 +75,9 @@ t2wait = 2; % set value for maximum time to wait for response (in seconds)
 score  = 0;
 
 % SQUARE TRIALS
+% The following series of loops run through the first three trials, creating 3 different grids
+% in which the location of the target changes/might not be present. There
+% is a target present in trial 1 and 3, and no target present in trial 2.
 for trial_num = 1:3
     for x = 1:length(DistractorX_loc)
         for y = 1:   length(DistractorY_loc)
@@ -117,6 +122,9 @@ ListenChar(1);
 end
 
 % PENTAGON TRIALS
+% The following series of loops runs through trials 4, 5, and 6, creating 3 different grids
+% in which the location of the target changes/might not be present. There
+% is a target present in trial 1 and 2, and no target present in trial 3.
 for trial_num = 4:6
     for x = 1:length(DistractorX_loc)
         for y = 1:length(DistractorY_loc)  
@@ -166,6 +174,9 @@ ListenChar(1);
 end
 
 % HEPTAGON TRIALS
+% The following series of loops runs through trials 7, 8, and 9, creating 3 different grids
+% in which the location of the target changes/might not be present. There
+% is a target present in trial 1 and 3, and no target present in trial 2.
 for trial_num = 7:9
     for x = 1:length(DistractorX_loc)
         for y = 1:length(DistractorY_loc)  
