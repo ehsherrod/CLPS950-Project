@@ -69,10 +69,10 @@ target_pixelY = [145, nan, 367, 457, 145, nan, 500, nan, 411];
 
 % Initialising for the score keeping 
 KbName('UnifyKeyNames');
-activeKeys = [KbName('space')]; 
-RestrictKeysForKbCheck(activeKeys); 
+activeKeys = [KbName('space')]; % define the key that will be used to make a response.
+RestrictKeysForKbCheck(activeKeys); % only accept the active keys. i.e a respsonse can only be made with the space bar
 ListenChar(2); % suppress echo to the command line for keypresses
-t2wait = 2; % set value for maximum time to wait for response (in seconds)
+t2wait = 2; % time to wait for response (in seconds)
 score  = 0;
 
 % SQUARE TRIALS
@@ -99,27 +99,27 @@ Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'RESPONSE PAGE', 'center', screenYpixels*0.35, black);
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press [space] if non-circle was present', 'center', screenYpixels*0.55, black);
-Screen('Flip', window);
-tStart = GetSecs; 
+Screen('Flip', window);% show response page
+tStart = GetSecs; % start time of waiting for key press
 timedout = false;
-        while ~timedout
+        while ~timedout % while there is still time to respond...
             [ keyIsDown, keyTime, keyCode ] = KbCheck;
-            if(keyIsDown) && (trial_num == 1 || trial_num == 3)  
-                score = score+1; 
-                break
-            elseif ~(keyIsDown) && ((keyTime - tStart) > t2wait) && (trial_num == 2) 
-                score = score+1; 
-                break
+            if(keyIsDown) && (trial_num == 1 || trial_num == 3)  % if space bar is pressed, and the trial contains a non-circle...
+                score = score+1; % current score will go up by 1
+                break % exit loop
+            elseif ~(keyIsDown) && ((keyTime - tStart) > t2wait) && (trial_num == 2)  % if space bar is not pressed, and the trial does not contain a non circle...                score = score+1; 
+                score = score+1; % current score will go up by 1
+                break %exit loop
             end
             if( (keyTime - tStart) > t2wait)
-                timedout = true;
+                timedout = true; % time has run out, you can no longer make a response.
             end
-             score;
+             score; % keep score
         end
         WaitSecs(2);
         score = score;  
 RestrictKeysForKbCheck;
-ListenChar(1);  
+ListenChar(1); % re-enable echo command for key press 
 end
 
 % PENTAGON TRIALS
