@@ -98,7 +98,6 @@ tStart = GetSecs;
 timedout = false;
         while ~timedout
             [ keyIsDown, keyTime, keyCode ] = KbCheck;
-            disp(keyTime)
             if(keyIsDown) && (trial_num == 1 || trial_num == 3)  
                 score = score+1; 
                 break
@@ -148,7 +147,6 @@ tStart = GetSecs;
 timedout = false;
         while ~timedout
             [ keyIsDown, keyTime, keyCode ] = KbCheck;
-            disp(keyTime)
             if(keyIsDown) && (trial_num == 4 || trial_num == 5)  
                 score = score+1; 
                 break
@@ -198,7 +196,6 @@ tStart = GetSecs;
 timedout = false;
         while ~timedout
             [ keyIsDown, keyTime, keyCode ] = KbCheck;
-            disp(keyTime)
             if(keyIsDown) && (trial_num == 7 || trial_num == 9)  
                 score = score+1; 
                 break
