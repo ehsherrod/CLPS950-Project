@@ -1,10 +1,10 @@
 % FINAL CODE (3/24 1PM)
 
 % GENERAL SET-UP FOR PTB/SCREEN
-sca;
+sca; % Clearing previous screens
 close all;
 clear;
-PsychDefaultSetup(2);
+PsychDefaultSetup(2); % Setting up Psychtoolbox
 screens = Screen('Screens');
 screenNumber = max(screens);
 white = WhiteIndex(screenNumber); black = BlackIndex(screenNumber); % Defining colors
@@ -17,6 +17,7 @@ Screen('BlendFunction', window, 'GL_SRC_ALPHA', 'GL_ONE_MINUS_SRC_ALPHA');
 [xCenter, yCenter] = RectCenter(windowRect); % Finding center of screen
 
 % TITLE PAGE: "Visual Search Task"
+% Displays characters while specifying color, font, location 
 Screen('TextSize', window, 60); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Visual Search Task', 'center', screenYpixels*0.25, black);
 % Subtitles
@@ -26,13 +27,13 @@ DrawFormattedText(window, 'A CLPS950 Project by Monica, Shay, & Eden', 'center',
 Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to continue', 'center', screenYpixels*0.95, black);
 
-Screen('Flip', window);
+Screen('Flip', window); % Flips to display the window on the screen
 KbStrokeWait; % Pressing any key to end
 
 %INSTRUCTIONS SLIDE FOR TASK
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Instructions:', 'center', screenYpixels*0.35, black);
-
+% Same format as earlier, with longer instructions
 Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
 Instructions = ['You will be presented figures of shapes for 3 seconds.\n\n', ...
     'Identify whether there is an target shape (non-circle) present or not.\n\n\n\n', ...
@@ -91,7 +92,7 @@ for trial_num = 1:3
         end
     end
 Screen('Flip', window);
-WaitSecs(2);  
+WaitSecs(2); % Waits 2 seconds before closing
 
 % ANSWER screen & BUTTON Collecting code
 Screen('TextSize', window, 30); Screen('TextFont', window, 'Times');
@@ -230,11 +231,11 @@ Screen('TextSize', window, 20); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'Congratulations! You have completed the task :)', 'center', screenYpixels*0.35, black);
 % SCORE
 Screen('TextSize', window, 15); Screen('TextFont', window, 'Times');
-DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black); %After figuring out how to collect responses diplay here.
+DrawFormattedText(window, sprintf('Your score: %d\n', score), 'center', screenYpixels*0.6, black);
 % EXIT subtitle
 Screen('TextSize', window, 12); Screen('TextFont', window, 'Times');
 DrawFormattedText(window, 'press any key to exit', 'center', screenYpixels*0.95, black);
 
-Screen('Flip', window);
-KbStrokeWait;
+Screen('Flip', window); % Displays window to the screen
+KbStrokeWait; % Waits for any key to be pressed
 sca; % clears screen
