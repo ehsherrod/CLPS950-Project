@@ -81,7 +81,7 @@ score  = 0;
 % is a target present in trial 1 and 3, and no target present in trial 2.
 for trial_num = 1:3
     for x = 1:length(DistractorX_loc)
-        for y = 1:   length(DistractorY_loc)
+        for y = 1:length(DistractorY_loc)
             if (x == target_posX(trial_num)) && (y == target_posY(trial_num))
                 draw_square = CenterRectOnPointd(baseSquare2, target_pixelX(trial_num),target_pixelY(trial_num));
                 Screen('FrameRect', window, color, draw_square, penWidth);
